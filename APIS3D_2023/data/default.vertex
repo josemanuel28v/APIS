@@ -1,0 +1,9 @@
+#version 330
+
+uniform mat4 MVP;
+in vec4 vpos;
+
+void main()
+{
+	gl_Position = MVP * vpos;
+}

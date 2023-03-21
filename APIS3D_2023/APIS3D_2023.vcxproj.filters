@@ -1,0 +1,205 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="APIS3D_2023.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="FactoryEngine.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="GL1Render.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="GL4Render.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="GLFWInputManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="GLSLMaterial.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="GLSLShader.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh3D.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="Object3D.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="Render.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="System.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="TrianguloRot.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="vertex_t.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraKeyboard.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeTex.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="GLTexture.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="utils.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="OrbitalLight.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderProgram.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="common.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="FactoryEngine.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GL1Render.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GL4Render.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GLFWInputManager.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GLSLMaterial.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GLSLShader.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh3D.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Object3D.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Render.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TrianguloRot.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="vertex_t.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraKeyboard.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeTex.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GLTexture.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="OrbitalLight.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderProgram.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="headers">
+      <UniqueIdentifier>{61d8907a-3c89-4119-bea2-81500898a9b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8089c874-a462-405d-84b9-a9e593cb95e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{d8a4e039-83dc-493d-8800-2875f4e99dce}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\program.fragment">
+      <Filter>data</Filter>
+    </None>
+    <None Include="data\program.vertex">
+      <Filter>data</Filter>
+    </None>
+    <None Include="data\asian_town.msh">
+      <Filter>data</Filter>
+    </None>
+    <None Include="data\default.fragment">
+      <Filter>data</Filter>
+    </None>
+    <None Include="data\default.vertex">
+      <Filter>data</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="data\asian_town.png">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\front.png">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\top.png">
+      <Filter>data</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

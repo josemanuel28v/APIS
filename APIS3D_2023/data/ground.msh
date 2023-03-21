@@ -1,0 +1,15 @@
+<mesh>
+	<buffers>
+		<buffer>
+			<material>
+				<color>1,0.7,0.4,1</color>
+				<vShader>program.vertex</vShader>
+				<fShader>program.fragment</fShader>
+				<shininess>100</shininess>
+			</material>
+			<indices>0, 1, 2, 2, 3, 0</indices>
+			<coords vertexCompCount="3">1.0, 0.0, 1.0, 1.0, 0.0, -1.0, -1.0, 0.0, -1.0, -1.0, 0.0, 1.0</coords>
+			<normals normalCompCount="3">0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0</normals>
+		</buffer>
+	</buffers>
+</mesh>
