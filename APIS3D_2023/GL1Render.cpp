@@ -11,36 +11,38 @@ GL1Render::GL1Render(int width, int height) : Render(width, height)
 
 GL1Render::~GL1Render()
 {
-    if (window) delete window;
-
-    window = nullptr;
+    if (window) glfwDestroyWindow(window);
 }
 
-int GL1Render::getHeigth() {
+int GL1Render::getHeigth() 
+{
     return height;
 }
 
-void GL1Render::setHeigth(int heigth) {
+void GL1Render::setHeigth(int heigth) 
+{
     this->height = height;
 }
 
-int GL1Render::getWidth() {
+int GL1Render::getWidth() 
+{
     return width;
 }
 
-void GL1Render::setWidth(int width) {
+void GL1Render::setWidth(int width) 
+{
     this->width = width;
 }
 
 void GL1Render::init()
 {
-	//Inicializa GLFW: 
+	// Inicializa GLFW
 	if (!glfwInit())
     {
         std::cout << "ERROR GLFWINIT\n";
     }
 
-    //Ponemos las directivas de Apple para que tambi�n les funcione:
+    // Apple build
     #ifdef __APPLE__
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
@@ -48,7 +50,7 @@ void GL1Render::init()
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
     #endif
 
-    //Creamos la ventana
+    // Crear la ventana
     window = glfwCreateWindow(this->width, this->height, "OpenGL 1.0", nullptr, nullptr);
 
     if (!window)
@@ -69,6 +71,8 @@ void GL1Render::init()
      gladLoadGL(glfwGetProcAddress);
 
      glEnable(GL_DEPTH_TEST);
+     glEnable(GL_BLEND);
+     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void GL1Render::setupObject(Object* obj)

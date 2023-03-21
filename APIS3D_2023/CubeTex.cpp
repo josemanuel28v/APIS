@@ -167,36 +167,35 @@ CubeTex::CubeTex()
 	horizontalFaces->addTriangle(4, 5, 6);
 	horizontalFaces->addTriangle(6, 7, 4);
 
-	// Texturas
-	Texture* frontText = new GLTexture("data/front.png");
-	Texture* topText = new GLTexture("data/top.png");
+	// MATERIALES
 
 	Material* frontMat = FactoryEngine::getNewMaterial();
 	Material* topMat = FactoryEngine::getNewMaterial();
 
-	frontMat->setTexture(frontText);
+	frontMat->setTexture(new GLTexture("data/front.png"));
 	frontMat->loadPrograms({"data/program.vertex", "data/program.fragment"});
 	frontMat->setShininess(50);
-	verticalFaces->setMaterial(frontMat);
+	frontMat->setTexturing(true);
+	frontMat->setLighting(true);
+	frontMat->setNormalMode(Material::PER_VERTEX);
 
-	topMat->setTexture(topText);
+	topMat->setTexture(new GLTexture("data/top.png"));
 	topMat->loadPrograms({ "data/program.vertex", "data/program.fragment" });
 	topMat->setShininess(50);
+	topMat->setTexturing(true);
+	topMat->setLighting(true);
+	topMat->setNormalMode(Material::PER_VERTEX);
+
+	verticalFaces->setMaterial(frontMat);
 	horizontalFaces->setMaterial(topMat);
 
 	this->setMesh(verticalFaces);
 	this->setMesh(horizontalFaces);
-
-	frontMat->setIsTextured(true);
-	topMat->setIsTextured(true);
-
-	frontMat->setNormalType(Material::vertexNormal);
-	topMat->setNormalType(Material::vertexNormal);
 }
 
 void CubeTex::step(double deltaTime)
 {
-	float rotationVelocity = 1;
-	rotation.y += rotationVelocity * deltaTime;
+	float rotationVelocity = 1.0f;
+	rotation.y += rotationVelocity * static_cast<float>(deltaTime);
 }
 

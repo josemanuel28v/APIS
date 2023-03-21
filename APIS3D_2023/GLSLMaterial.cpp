@@ -7,7 +7,7 @@ using renderType = RenderProgram::renderTypes_e;
 GLSLMaterial::GLSLMaterial()
 {
 	this->program = new GLSLShader();
-	this->colorTexture = nullptr;
+	this->colorMap = nullptr;
 	this->normalMap = nullptr;
 	color = glm::vec4(1.0, 1.0, 1.0, 1.0);
 }
@@ -36,16 +36,16 @@ void GLSLMaterial::prepare()
 	glEnableVertexAttribArray(program->varList["vpos"]);
 	glVertexAttribPointer(program->varList["vpos"], 4, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, position));
 
-	if (normType == Material::vertexNormal)
+	if (normalMode == Material::PER_VERTEX)
 	{
 		glEnableVertexAttribArray(program->varList["vnorm"]);
 		glVertexAttribPointer(program->varList["vnorm"], 4, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, normal));
 	}
 
-	if (isTextured)
+	if (texturing)
 	{
-		GLTexture* text = dynamic_cast<GLTexture*>(colorTexture);
-		colorTexture->bind(text->getTextureUnit());
+		GLTexture* text = dynamic_cast<GLTexture*>(colorMap);
+		colorMap->bind(text->getTextureUnit());
 
 		glEnableVertexAttribArray(program->varList["vtextcoord"]);
 		glVertexAttribPointer(program->varList["vtextcoord"], 2, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, textCoord));
@@ -60,8 +60,9 @@ void GLSLMaterial::prepare()
 
 	program->setVec3("eyePos", System::camera->getPosition());
 	program->setVec3("ambient", System::getAmbient());
-	program->setInt("isTextured", (int)isTextured);
-	program->setInt("computeLight", (int)normType);
+	program->setInt("texturing", (int)texturing);
+	program->setInt("lighting", (int)lighting);
+	program->setInt("normalMode", (int)normalMode);
 	program->setInt("shininess", shininess);
 	program->setVec4("baseColor", color);
 	program->setInt("numLights", System::lights->size());

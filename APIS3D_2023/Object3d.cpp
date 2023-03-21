@@ -9,11 +9,11 @@ void Object3D::loadDataFromFile(const char* fileName)
     if (result) 
     {
         std::string path = utils::extractPath(fileName);
-
         pugi::xml_node buffersNode = doc.child("mesh").child("buffers");
+
         for (pugi::xml_node bufferNode = buffersNode.child("buffer");
-            bufferNode;
-            bufferNode = bufferNode.next_sibling("buffer"))
+             bufferNode;
+             bufferNode = bufferNode.next_sibling("buffer"))
         {
             Mesh3D* m = new Mesh3D();
             Material* mat = FactoryEngine::getNewMaterial();
@@ -37,7 +37,7 @@ void Object3D::loadDataFromFile(const char* fileName)
             {
                 std::string textureFile = path + bufferNode.child("material").child("texture").text().as_string();
                 mat->setTexture(new GLTexture(textureFile));
-                mat->setIsTextured(true);
+                mat->setTexturing(true);
             }
 
             // Shaders
@@ -59,7 +59,8 @@ void Object3D::loadDataFromFile(const char* fileName)
             std::vector<float> tcList;
             std::vector<float> nList;
 
-            if (mat->getIsTextured())
+            // Coordenadas de textura
+            if (mat->getTexturing())
             {
                 tcList = utils::splitString<float>(bufferNode.child("texCoords").text().as_string(), ',');
             }
@@ -67,8 +68,14 @@ void Object3D::loadDataFromFile(const char* fileName)
             // Normales
             if (bufferNode.child("normals"))
             {
-                mat->setNormalType(Material::vertexNormal);
+                mat->setNormalMode(Material::PER_VERTEX);
                 nList = utils::splitString<float>(bufferNode.child("normals").text().as_string(), ',');
+            }
+
+            // Iluminación (de momento parece que no hay un "lighting" en los archivos .msh)
+            if (mat->getNormalMode() != Material::NONE)
+            {
+                mat->setLighting(true);
             }
 
             auto coord = vList.begin();
