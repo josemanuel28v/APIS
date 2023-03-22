@@ -2,9 +2,9 @@
 	<buffers>
 		<buffer>
 			<material>
-				<texture>data/smoke.png</texture>
-				<vShader>data/program.vertex</vShader>
-				<fShader>data/program.fragment</fShader>
+				<texture>smoke.png</texture>
+				<vShader>program.vertex</vShader>
+				<fShader>program.fragment</fShader>
 				<light>false</light>
 				<blendMode>alpha</blendMode>
 				<culling>false</culling>

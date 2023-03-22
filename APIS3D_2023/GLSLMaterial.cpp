@@ -55,10 +55,10 @@ void GLSLMaterial::prepare()
 
 	// Uniforms
 	program->setMatrix("model", System::getModelMatrix());
-	program->setMatrix("view", System::camera->getView());
-	program->setMatrix("proj", System::camera->getProjection());
+	program->setMatrix("view", System::getCamera()->getView());
+	program->setMatrix("proj", System::getCamera()->getProjection());
 
-	program->setVec3("eyePos", System::camera->getPosition());
+	program->setVec3("eyePos", System::getCamera()->getPosition());
 	program->setVec3("ambient", System::getAmbient());
 	program->setInt("texturing", (int)texturing);
 	program->setInt("lighting", (int)lighting);
@@ -74,6 +74,40 @@ void GLSLMaterial::prepare()
 		program->setVec3("lights[" + std::to_string(i) + "].color", (*System::lights)[i]->getInfo().color);
 		program->setInt("lights[" + std::to_string(i) + "].type", (int)(*System::lights)[i]->getInfo().type);
 		program->setFloat("lights[" + std::to_string(i) + "].linearAtt", (int)(*System::lights)[i]->getInfo().linearAtt);
+	}
+
+	// Depth test
+	depthWrite ? glDepthMask(GL_TRUE) : glDepthMask(GL_FALSE);
+
+	// Culling test
+	if (culling) 
+	{
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+	}
+	else 
+	{
+		glDisable(GL_CULL_FACE);
+	}
+
+	// Modo de mezclado de colores
+	switch (blendMode)
+	{
+	case SOLID: 
+		glBlendFunc(GL_ONE, GL_ZERO);
+		break;
+	
+	case ALPHA: 
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		break;
+	
+	case MUL: 
+		glBlendFunc(GL_DST_COLOR, GL_ZERO);
+		break;
+	
+	case ADD: 
+		glBlendFunc(GL_ONE, GL_ONE);
+		break;
 	}
 }
 

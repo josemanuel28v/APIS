@@ -36,18 +36,12 @@ void main()
 	// No iluminado + text		 -> colorText
 	// No iluminado + no text	 -> colorBase
 
-	vec4 objectColor;
+	vec4 objectColor = baseColor;
 
 	if (texturing == 1)
 	{
-		fragColor = texture2D(colorText,ftextcoord);
-		objectColor = fragColor; // Si el objeto esta texturizado se sustituye el colorBase con el color de la textura
+		objectColor = objectColor * texture2D(colorText,ftextcoord);
 	}	
-	else
-	{
-		fragColor = baseColor;
-		objectColor = baseColor;
-	}
 
 	if (lighting == 1)
 	{
@@ -93,10 +87,14 @@ void main()
 			lightColor *= lights[i].color;
 		}
 
+		lightColor = normalize(lightColor);
+
 		vec3 diffuse = diff * lightColor;
 		vec3 specular = spec * vec3(1.0f);
 
-		fragColor = vec4(ambient + diffuse + specular, 1.0) * objectColor;
+		objectColor = vec4(ambient + diffuse + specular, 1.0) * objectColor;
 	}
+
+	fragColor = objectColor;
 }
 

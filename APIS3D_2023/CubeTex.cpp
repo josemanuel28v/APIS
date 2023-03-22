@@ -7,11 +7,7 @@ CubeTex::CubeTex()
 	Mesh3D* verticalFaces = new Mesh3D();
 	Mesh3D* horizontalFaces = new Mesh3D();
 
-	verticalFaces->setDepthTestEnabled(true);
-	horizontalFaces->setDepthTestEnabled(true);
-
 	// Cara vertical frontal
-
 	vertex_t v0, v1, v2, v3;
 	
 	v0.position = glm::vec4(-0.5f, -0.5f, 0.5f, 1.0f);
@@ -34,8 +30,8 @@ CubeTex::CubeTex()
 	verticalFaces->addVertex(v2);
 	verticalFaces->addVertex(v3);
 
-	verticalFaces->addTriangle(0, 1, 2);
-	verticalFaces->addTriangle(2, 3, 0);
+	verticalFaces->addTriangle(1, 0, 2);
+	verticalFaces->addTriangle(3, 2, 0);
 
 	// Cara vertical izquierda (izquierda de frente)
 	vertex_t v4, v5, v6, v7;
@@ -60,8 +56,8 @@ CubeTex::CubeTex()
 	verticalFaces->addVertex(v6);
 	verticalFaces->addVertex(v7);
 
-	verticalFaces->addTriangle(4, 5, 6);
-	verticalFaces->addTriangle(6, 7, 4);
+	verticalFaces->addTriangle(5, 4, 6);
+	verticalFaces->addTriangle(7, 6, 4);
 
 	// Cara derecha (derecha de frente)
 	vertex_t v8, v9, v10, v11;
@@ -86,8 +82,8 @@ CubeTex::CubeTex()
 	verticalFaces->addVertex(v10);
 	verticalFaces->addVertex(v11);
 
-	verticalFaces->addTriangle(8, 9, 10);
-	verticalFaces->addTriangle(10, 11, 8);
+	verticalFaces->addTriangle(9, 8, 10);
+	verticalFaces->addTriangle(11, 10, 8);
 
 	// Cara trasera
 	vertex_t v12, v13, v14, v15;
@@ -138,8 +134,8 @@ CubeTex::CubeTex()
 	horizontalFaces->addVertex(v18);
 	horizontalFaces->addVertex(v19);
 
-	horizontalFaces->addTriangle(0, 1, 2);
-	horizontalFaces->addTriangle(2, 3, 0);
+	horizontalFaces->addTriangle(0, 2, 1);
+	horizontalFaces->addTriangle(3, 2, 0);
 
 	// Cara inferior
 	vertex_t v20, v21, v22, v23;
@@ -164,8 +160,8 @@ CubeTex::CubeTex()
 	horizontalFaces->addVertex(v22);
 	horizontalFaces->addVertex(v23);
 
-	horizontalFaces->addTriangle(4, 5, 6);
-	horizontalFaces->addTriangle(6, 7, 4);
+	horizontalFaces->addTriangle(5, 4, 6);
+	horizontalFaces->addTriangle(7, 6, 4);
 
 	// MATERIALES
 
@@ -178,6 +174,8 @@ CubeTex::CubeTex()
 	frontMat->setTexturing(true);
 	frontMat->setLighting(true);
 	frontMat->setNormalMode(Material::PER_VERTEX);
+	frontMat->setDepthWrite(true);
+	frontMat->setCulling(true);
 
 	topMat->setTexture(new GLTexture("data/top.png"));
 	topMat->loadPrograms({ "data/program.vertex", "data/program.fragment" });
@@ -185,12 +183,14 @@ CubeTex::CubeTex()
 	topMat->setTexturing(true);
 	topMat->setLighting(true);
 	topMat->setNormalMode(Material::PER_VERTEX);
+	topMat->setDepthWrite(true);
+	topMat->setCulling(true);
 
 	verticalFaces->setMaterial(frontMat);
 	horizontalFaces->setMaterial(topMat);
 
-	this->setMesh(verticalFaces);
-	this->setMesh(horizontalFaces);
+	this->setMesh(Mesh3D::ptr(verticalFaces));
+	this->setMesh(Mesh3D::ptr(horizontalFaces));
 }
 
 void CubeTex::step(double deltaTime)

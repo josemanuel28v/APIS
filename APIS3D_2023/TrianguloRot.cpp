@@ -23,7 +23,7 @@ TrianguloRot::TrianguloRot()
     mat->loadPrograms({"data/default.vertex", "data/default.fragment"});
 
     // Añadir la malla al objeto y establecer atributos básicos
-    setMesh(triangle_mesh);
+    setMesh(Mesh3D::ptr(triangle_mesh));
 }
 
 void TrianguloRot::step(double deltaTime)

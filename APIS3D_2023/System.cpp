@@ -9,6 +9,7 @@ Render* System::render = nullptr;
 InputManager* System::inputManager = nullptr;
 std::vector<Object*>* System::objects = nullptr;
 std::vector<Light*>* System::lights = nullptr;
+std::vector<Emitter*>* System::emitters = nullptr;
 glm::vec3 System::ambient = glm::vec3(0.1f, 0.1f, 0.1f);
 bool System::end = false;
 glm::mat4 System::modelMatrix;
@@ -20,6 +21,7 @@ void System::initSystem()
 
 	objects = new std::vector<Object*>();
 	lights = new std::vector<Light*>();
+	emitters = new std::vector<Emitter*>();
 
 	render->init();
 
@@ -45,13 +47,23 @@ void System::initSystem()
 void System::addObject(Object* obj)
 {
 	objects->push_back(obj);
-	render->setupObject(obj);
+}
+
+void System::addEmitter(Emitter* emitter)
+{
+	emitters->push_back(emitter);
 }
 
 void System::removeObject(int objectIdx)
 {
 	delete (*objects)[objectIdx];
-	lights->erase(lights->begin() + objectIdx);
+	objects->erase(objects->begin() + objectIdx);
+}
+
+void System::removeEmitter(int emitterIdx)
+{
+	delete (*emitters)[emitterIdx];
+	emitters->erase(emitters->begin() + emitterIdx);
 }
 
 void System::exit()
@@ -69,7 +81,16 @@ void System::mainLoop()
 		render->setupObject(obj);
 	}
 
-	while (!end) {
+	// Setup emitters particles
+	for (const auto& emitter : *emitters)
+	{
+		render->setupObject(emitter->getPrototypeParticle());
+	}
+
+	while (!end) 
+	{
+		// Limpiar buffers
+		render->clearDisplay();
 
 		// Actualizar time manager
 		t.update();
@@ -89,10 +110,22 @@ void System::mainLoop()
 			light->step(t.getTime());
 		}
 
+		// Actualizar emisores
+		std::vector<Object*> particles(1);
+		for (auto& emitter : *emitters)
+		{
+			emitter->step(t.getDeltaTime());
+			for (auto& particle : *emitter->getParticleList())
+			{
+				particle->step(t.getDeltaTime());
+				render->drawObject(particle);
+			}
+		}
+
 		// Dibujar objetos
 		render->drawObjects(objects);
 
-		// Gestionar eventos: Mover a clase correspondiente
+		// Gestionar eventos
 		glfwPollEvents();
 
 		if (inputManager->isPressed('E') || render->isClosed()) exit();	
@@ -103,7 +136,9 @@ void System::mainLoop()
 			inputManager->setWindowResized();
 			camera->setAspect((float)size.x / size.y);
 			camera->computeProjectionMatrix();
-		}
+		}	
+
+		render->swapBuffers();
 	}	 
 }
 

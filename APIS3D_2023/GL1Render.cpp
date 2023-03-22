@@ -24,6 +24,17 @@ void GL1Render::setHeigth(int heigth)
     this->height = height;
 }
 
+void GL1Render::clearDisplay()
+{
+    // Limpiar buffer de color y profundidad
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void GL1Render::swapBuffers()
+{
+    glfwSwapBuffers(window);
+}
+
 int GL1Render::getWidth() 
 {
     return width;
@@ -83,32 +94,30 @@ void GL1Render::removeObject(Object* obj)
 {
 }
 
-void GL1Render::drawObjects(std::vector<Object*>* objs)
+void GL1Render::drawObject(Object* obj)
 {
-    // Limpiar buffer color
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glBegin(GL_TRIANGLES);
-
-    for (const auto& obj : *objs) 
+    obj->computeModelMatrix();
+    for (const auto& mesh : obj->getMeshes())
     {
-        obj->computeModelMatrix();
-        for (const auto& mesh : obj->getMeshes())
+        // Color por mesh
+        glm::vec4 color = mesh->getMaterial()->getColor();
+        glColor3f(color.x, color.y, color.z);
+        for (const auto& vert : *mesh->getVertices())
         {
-            // Color por mesh
-            glm::vec4 color = mesh->getMaterial()->getColor();
-            glColor3f(color.x, color.y, color.z);
-            for (const auto& vert : *mesh->getVertList())
-            {
-                glm::vec4 position = obj->getModelMt() * vert.position;
-                // Color por vértice
-                //glColor3f(vert.color.r, vert.color.g, vert.color.b);
-                glVertex3f(position.x, position.y, position.z);
-            }
+            glm::vec4 position = obj->getModelMt() * vert.position;
+            glVertex3f(position.x, position.y, position.z);
         }
     }
-    glEnd();
+}
 
-    glfwSwapBuffers(window);
+void GL1Render::drawObjects(std::vector<Object*>* objs)
+{
+    glBegin(GL_TRIANGLES);
+    for (const auto& obj : *objs) 
+    {
+        drawObject(obj);
+    }
+    glEnd();
 }
 
 bool GL1Render::isClosed()

@@ -4,76 +4,67 @@ unsigned int Mesh3D::counter = 0;
 
 Mesh3D::Mesh3D()
 {
-	meshID = counter++;
-	vVertList = new std::vector<vertex_t>();
-	vTriangleIdxList = new std::vector<glm::uint32>();
-	mat = nullptr;
+	id = counter++;
+
+	vertices = new std::vector<vertex_t>();
+	indices = new std::vector<glm::uint32>();
+	material = nullptr;
 }
 
 Mesh3D::~Mesh3D()
 {
-	if (mat) delete mat;
+	if (material) delete material;
 
-	vVertList->clear();
-	vTriangleIdxList->clear();
+	vertices->clear();
+	indices->clear();
 
-	delete vVertList;
-	delete vTriangleIdxList;
-
-	mat = nullptr;
-	vVertList = nullptr;
-	vTriangleIdxList = nullptr;
+	delete vertices;
+	delete indices;
 }
 
 unsigned int Mesh3D::getMeshID()
 {
-	return meshID;
+	return id;
 }
 
 void Mesh3D::addVertex(vertex_t v)
 {
-	vVertList->push_back(v);
+	vertices->push_back(v);
 }
 
-std::vector<struct vertex_t>* Mesh3D::getVertList()
+std::vector<struct vertex_t>* Mesh3D::getVertices()
 {
-	return vVertList;
+	return vertices;
 }
 
 Material* Mesh3D::getMaterial()
 {
-	return mat;
+	return material;
 }
 
-void Mesh3D::setMaterial(Material* mat)
+void Mesh3D::setMaterial(Material* material)
 {
-	this->mat = mat;
+	this->material = material;
 }
 
-void Mesh3D::setVertexList(std::vector<glm::uint32>* vList)
+void Mesh3D::setVertices(std::vector<struct vertex_t>* vertices)
 {
-	vTriangleIdxList = vList;
+	this->vertices = vertices;
 }
 
-void Mesh3D::setDepthTestEnabled(bool depthTestEnabled)
+void Mesh3D::setIndices(std::vector<glm::uint32>* indices)
 {
-	this->depthTestEnabled = depthTestEnabled;
+	this->indices = indices;
 }
 
-bool Mesh3D::getDepthTestEnabled()
+std::vector<glm::uint32>* Mesh3D::getIndices()
 {
-	return depthTestEnabled;
+	return indices;
 }
 
-std::vector<glm::uint32>* Mesh3D::getTriangleIdxList()
+void Mesh3D::addTriangle(glm::uint32 id1, glm::uint32 id2, glm::uint32 id3)
 {
-	return vTriangleIdxList;
-}
-
-void Mesh3D::addTriangle(glm::uint32 vId1, glm::uint32 vId2, glm::uint32 vId3)
-{
-	//Agregamos los 3 puntos al final de la lista vTriangleIdxList
-	vTriangleIdxList->push_back(vId1);
-	vTriangleIdxList->push_back(vId2);
-	vTriangleIdxList->push_back(vId3);
+	indices->push_back(id1);
+	indices->push_back(id2);
+	indices->push_back(id3);
 }

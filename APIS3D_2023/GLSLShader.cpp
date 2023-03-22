@@ -139,23 +139,28 @@ void GLSLShader::setProgram(std::string fileName, renderTypes_e type)
 	checkShaderError(shId);
 }
 
-void GLSLShader::setInt(std::string loc, int val) {
+void GLSLShader::setInt(std::string loc, int val) 
+{
 	glUniform1i(varList[loc], val);
 }
 
-void GLSLShader::setFloat(std::string loc, float val) {
+void GLSLShader::setFloat(std::string loc, float val) 
+{
 	glUniform1f(varList[loc], val);
 }
 
-void GLSLShader::setVec3(std::string loc, const glm::vec3& vec) {
+void GLSLShader::setVec3(std::string loc, const glm::vec3& vec) 
+{
 	glUniform3fv(varList[loc], 1, glm::value_ptr(vec));
 }
 
-void GLSLShader::setVec4(std::string loc, const glm::vec4& vec) {
+void GLSLShader::setVec4(std::string loc, const glm::vec4& vec) 
+{
 	glUniform4fv(varList[loc], 1, glm::value_ptr(vec));
 }
 
-void GLSLShader::setMatrix(std::string loc, const glm::mat4& matrix) {
+void GLSLShader::setMatrix(std::string loc, const glm::mat4& matrix) 
+{
 	glUniformMatrix4fv(varList[loc], 1, GL_FALSE, glm::value_ptr(matrix));
 }
 

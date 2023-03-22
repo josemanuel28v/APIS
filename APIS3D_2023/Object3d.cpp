@@ -1,13 +1,28 @@
 #include "Object3D.h"
 #include "FactoryEngine.h"
+#include "State.h"
+#include "MSH.h"
 
 void Object3D::loadDataFromFile(const char* fileName)
 {
+    // Comprobar si ya se ha cargado el fichero .msh anteriormente
+    if (State::existMSH(fileName))
+    {
+        MSH* meshes = State::getMSH(fileName);
+        for (Mesh3D::ptr mesh : meshes->getMeshes())
+        {
+            this->setMesh(mesh);
+        }
+
+        return;
+    }
+
     pugi::xml_document doc;
     pugi::xml_parse_result result = doc.load_file(fileName);
 
     if (result) 
     {
+        MSH* msh = new MSH();
         std::string path = utils::extractPath(fileName);
         pugi::xml_node buffersNode = doc.child("mesh").child("buffers");
 
@@ -15,9 +30,9 @@ void Object3D::loadDataFromFile(const char* fileName)
              bufferNode;
              bufferNode = bufferNode.next_sibling("buffer"))
         {
-            Mesh3D* m = new Mesh3D();
+            Mesh3D* mesh = new Mesh3D();
             Material* mat = FactoryEngine::getNewMaterial();
-            m->setMaterial(mat);
+            mesh->setMaterial(mat);
 
             // Color
             if (bufferNode.child("material").child("color"))
@@ -41,8 +56,7 @@ void Object3D::loadDataFromFile(const char* fileName)
             }
 
             // Shaders
-            if (bufferNode.child("material").child("vShader") && 
-                bufferNode.child("material").child("fShader"))
+            if (bufferNode.child("material").child("vShader") && bufferNode.child("material").child("fShader"))
             {
                 std::string vShader = path + bufferNode.child("material").child("vShader").text().as_string();
                 std::string fShader = path + bufferNode.child("material").child("fShader").text().as_string();
@@ -53,6 +67,40 @@ void Object3D::loadDataFromFile(const char* fileName)
                 std::string vShader = "data/default.vertex";
                 std::string fShader = "data/default.fragment";
                 mat->loadPrograms({ vShader, fShader });
+            }
+
+            // Iluminación 
+            if (bufferNode.child("material").child("light"))
+            {
+                mat->setLighting(bufferNode.child("material").child("light").text().as_bool());
+            }
+
+            // Depth buffer
+            if (bufferNode.child("material").child("depthWrite"))
+            {
+                mat->setDepthWrite(bufferNode.child("material").child("depthWrite").text().as_bool());
+            }
+
+            // Backface culling
+            if (bufferNode.child("material").child("culling"))
+            {
+                mat->setCulling(bufferNode.child("material").child("culling").text().as_bool());
+            }
+
+            // Blend mode
+            if (bufferNode.child("material").child("blendMode"))
+            {
+                std::string blendMode = bufferNode.child("material").child("blendMode").text().as_string();
+
+                if (blendMode == "alpha")
+                {
+                    mat->setBlendMode(Material::ALPHA);
+                }
+                //else if (blendMode == "mul")...
+            }
+            else
+            {
+                mat->setBlendMode(Material::SOLID);
             }
 
             std::vector<float> vList = utils::splitString<float>(bufferNode.child("coords").text().as_string(), ',');
@@ -70,12 +118,6 @@ void Object3D::loadDataFromFile(const char* fileName)
             {
                 mat->setNormalMode(Material::PER_VERTEX);
                 nList = utils::splitString<float>(bufferNode.child("normals").text().as_string(), ',');
-            }
-
-            // Iluminación (de momento parece que no hay un "lighting" en los archivos .msh)
-            if (mat->getNormalMode() != Material::NONE)
-            {
-                mat->setLighting(true);
             }
 
             auto coord = vList.begin();
@@ -105,16 +147,21 @@ void Object3D::loadDataFromFile(const char* fileName)
                     v.normal.w = 0.0f;
                 }
 
-                m->addVertex(v);
+                mesh->addVertex(v);
             }
 
-            *(m->getTriangleIdxList()) = utils::splitString<unsigned int>(bufferNode.child("indices").text().as_string(), ',');
+            *(mesh->getIndices()) = utils::splitString<unsigned int>(bufferNode.child("indices").text().as_string(), ',');
 
-            setMesh(m);
+            Mesh3D::ptr sharedMesh(mesh);
+            this->setMesh(sharedMesh);
+            msh->addMesh(sharedMesh);
         }
+
+        State::addMSH(fileName, msh);
     }
-    else {
-        // No se ha podido cargar
+    else 
+    {
+        std::cout << "No se ha podido cargar la imagen " << fileName << std::endl;
         std::cout << result.description() << std::endl;
     }
 }

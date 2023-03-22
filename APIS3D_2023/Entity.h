@@ -15,17 +15,18 @@ protected:
 public:
 
 	Entity();
-	void computeModelMatrix();
+	virtual ~Entity() {}
+	virtual void computeModelMatrix();
 	virtual void step(double deltaTime) = 0;
 
-	void setPosition(glm::vec4 position);
-	void setRotation(glm::vec4 rotation);
-	void setScaling(glm::vec4 scaling);
-	void setModelMt(glm::mat4 modelMt);
+	virtual void setPosition(glm::vec4 position);
+	virtual void setRotation(glm::vec4 rotation);
+	virtual void setScaling(glm::vec4 scaling);
+	virtual void setModelMt(glm::mat4 modelMt);
 
-	glm::vec4 getPosition();
-	glm::vec4 getRotation();
-	glm::vec4 getScaling();
-	glm::mat4 getModelMt();
+	virtual glm::vec4 getPosition();
+	virtual glm::vec4 getRotation();
+	virtual glm::vec4 getScaling();
+	virtual glm::mat4 getModelMt();
 };
 

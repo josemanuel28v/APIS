@@ -99,7 +99,7 @@ Material::NormalMode Material::getNormalMode() const
 
 Texture* Material::getTexture() const
 {
-    return normalMap;
+    return colorMap;
 }
 
 RenderProgram* Material::getProgram() const

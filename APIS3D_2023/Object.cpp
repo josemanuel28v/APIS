@@ -1,21 +1,12 @@
 #include "Object.h"
 
-Object::~Object()
-{
-	for (Mesh3D* mesh : meshes)
-	{
-		delete mesh;
-	}
-
-	meshes.clear();
-}
-
-void Object::setMesh(Mesh3D* mesh)
+void Object::setMesh(Mesh3D::ptr mesh)
 {
 	meshes.push_back(mesh);
 }
 
-std::vector<Mesh3D*>& Object::getMeshes()
+std::vector<Mesh3D::ptr>& Object::getMeshes()
 {
 	return meshes;
 }
+

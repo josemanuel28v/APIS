@@ -5,6 +5,7 @@
 #include "CubeTex.h"
 #include "CameraKeyboard.h"
 #include "OrbitalLight.h"
+#include "Emitter.h"
 
 int main(int argc, char** argv)
 {
@@ -13,59 +14,46 @@ int main(int argc, char** argv)
     FactoryEngine::SetSelectedInputBackend(FactoryEngine::InputBackend::GLFW);
 
     // Inicializar cámara
-    glm::vec3 position = glm::vec3(0.0f, 3.0f, 3.0f);
+    glm::vec3 position = glm::vec3(0.0f, 0.0f, 25.0f);
     glm::vec3 lookAt = glm::vec3(0.0f, 0.0f, 0.0f);
     Camera* camera = new CameraKeyboard(Camera::ProjectionType::PERSPECTIVE, position, glm::vec3(0.0f, 1.0f, 0.0f), lookAt);
      
     // Inicializar sistema (backends)
     System::initSystem();
 
-    // Iluminación
-    System::addLight(new Light(
-        glm::vec4(1.0f, 1.0f, 1.0f, 0.0f),
-        glm::vec3(1.0f, 1.0f, 1.0f),
-        glm::vec3(1.0f, 1.0f, 1.0f), 
-        Light::DIRECTIONAL,
-        1.0f
-    ));
+    // Luz
+    System::addLight(new Light(glm::vec4(0.0f), glm::vec3(-4, 4, 0), glm::vec3(1.0f), Light::POINT, 0.5f));
 
-    System::addLight(new OrbitalLight(
-        glm::vec4(1.0f, 1.0f, 1.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, 0.0f),
-        glm::vec3(1.0f, 1.0f, 1.0f),
-        Light::POINT,
-        0.2,
-        5)
-    );
+    // Totem
+    Object3D* totem = new Object3D();
+    totem->loadDataFromFile("data/column.msh");
+    totem->setScaling(glm::vec4(0.01f));
 
-    // Crear cubo
-    CubeTex* cube = new CubeTex();
-    cube->setPosition(glm::vec4(0.75f, 0.0f, 0.0f, 1.0f));
+    // Emisores
+    Emitter* smokeEmitter = new Emitter("data/smoke.msh", true);
+    Emitter* flameEmitter = new Emitter("data/flame.msh", true);
 
-    // Crear bunny
-    Object3D* bunny = new Object3D();
-    //bunny->loadDataFromFile("data/bunny.msh");
-    bunny->setPosition(glm::vec4(-0.75f, -0.5f, 0.0f, 1.0f));
-    bunny->setScaling(glm::vec4(10.0f, 10.0f, 10.0f, 1.0f));
-    bunny->setRotation(glm::vec4(M_PI * 0.5, 0.0f, 0.0f, 1.0f));
+    smokeEmitter->setPosition(glm::vec4(0.0f, 7.0f, 0.0f, 1.0f));
+    smokeEmitter->setRateRange(5, 10);
+    smokeEmitter->setLifeTimeRange(1, 5);
+    smokeEmitter->setVelocityRange(glm::vec3(-0.1f, 1.0f, -0.1f), glm::vec3(0.1f, 4.0f, 0.1f));
+    smokeEmitter->setSpinVelocityRange(glm::radians(30.0f), glm::radians(60.0f));
+    smokeEmitter->setScaleRange(0.05f, 0.1f);
 
-    // Crear asian town
-    Object3D* town = new Object3D();
-    //town->loadDataFromFile("data/asian_town.msh");
-    town->setScaling(glm::vec4(10.0f, 10.0f, 10.0f, 1.0f));
+    flameEmitter->setPosition(glm::vec4(0.0f, 7.0f, 0.0f, 1.0f));
+    flameEmitter->setRateRange(10, 25);
+    flameEmitter->setLifeTimeRange(0.5f, 0.5f);
+    flameEmitter->setVelocityRange(glm::vec3(-1.0f, 5.0f, -1.0f), glm::vec3(1.0f, 10.0f, 1.0f));
+    flameEmitter->setSpinVelocityRange(glm::radians(0.0f), glm::radians(0.0f));
+    flameEmitter->setScaleRange(0.025f, 0.1f);
 
-    Object3D* ground = new Object3D();
-    ground->loadDataFromFile("data/ground.msh");
-    ground->setScaling(glm::vec4(25.0f, 1.0f, 25.0f, 1.0f));
-    ground->setPosition(glm::vec4(0.0f, -0.5f, 0.0f, 1.0f));
+    System::addObject(totem);
+    System::addEmitter(smokeEmitter);
+    System::addEmitter(flameEmitter);
 
     // Añadir objetos al sistema y lanzar el bucle de dibujado
     System::setAmbient(glm::vec3(0.2, 0.2, 0.2));
     System::setCamera(camera);
-    System::addObject(cube);
-    System::addObject(ground);
-    //System::addObject(bunny);
-    //System::addObject(town);
     System::mainLoop();
     System::releaseMemory();
 }

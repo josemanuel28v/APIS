@@ -6,6 +6,7 @@
 #include "InputManager.h"
 #include "Object.h"
 #include "Light.h"
+#include "Emitter.h"
 
 class TimeManager {
 
@@ -41,26 +42,36 @@ public:
 	static Render* render;
 	static InputManager* inputManager;
 	static std::vector<Object*>* objects;
+	static std::vector<Light*>* lights;
+	static std::vector<Emitter*>* emitters;
 	static bool end;
 	static glm::mat4 modelMatrix;
-	static std::vector<Light*>* lights;
 	static glm::vec3 ambient;
 
 	static void initSystem();
-	static void addObject(Object* obj);
-	static void removeObject(int objectIdx);
-	static void exit();
 	static void mainLoop();
+	static void exit();
+	static void releaseMemory();
+
+	static void addLight(Light* light);
+	static void addObject(Object* obj);
+	static void addEmitter(Emitter* emitter);
+
+	static void removeLight(int lightIdx);
+	static void removeObject(int objectIdx);
+	static void removeEmitter(int emitterIdx);
+
 	static void setCamera(Camera* camera);
+	static void setModelMatrix(glm::mat4 newModelMatrix);
+	static void setAmbient(const glm::vec3& ambient);
+
 	static Camera* getCamera();
 	static glm::mat4 getModelMatrix();
-	static void setModelMatrix(glm::mat4 newModelMatrix);
 	static const glm::vec3 getAmbient();
-	static void setAmbient(const glm::vec3& ambient);
 	static std::vector<Light*>* getLights();
-	static void addLight(Light* light);
-	static void removeLight(int lightIdx);
 
-	static void releaseMemory();
+
+
+	
 };
 

@@ -19,7 +19,7 @@ public:
 
 	enum BlendMode
 	{
-		ALPHA, ADD, MUL
+		SOLID, ALPHA, ADD, MUL
 	};
 
 	virtual ~Material();
@@ -63,6 +63,6 @@ protected:
 	bool culling = false;
 	bool depthWrite = false;
 	NormalMode normalMode = NormalMode::NONE;
-	BlendMode blendMode = BlendMode::ALPHA;
+	BlendMode blendMode = BlendMode::SOLID;
 };
 

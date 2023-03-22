@@ -79,6 +79,10 @@
     <ClCompile Include="RenderProgram.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="Billboard.cpp" />
+    <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="State.cpp" />
+    <ClCompile Include="Emitter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">
@@ -162,6 +166,11 @@
     <ClInclude Include="RenderProgram.h">
       <Filter>headers</Filter>
     </ClInclude>
+    <ClInclude Include="Billboard.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="MSH.h" />
+    <ClInclude Include="State.h" />
+    <ClInclude Include="Emitter.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="headers">

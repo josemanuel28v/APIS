@@ -10,7 +10,10 @@ public:
 	virtual void init() = 0;
 	virtual void setupObject(Object* obj) = 0;
 	virtual void removeObject(Object* obj) = 0;
+	virtual void drawObject(Object* obj) = 0;
 	virtual void drawObjects(std::vector<Object*>* objs) = 0;
+	virtual void clearDisplay() = 0;
+	virtual void swapBuffers() = 0;
 
 	virtual int getWidth() = 0;
 	virtual int getHeigth() = 0;
