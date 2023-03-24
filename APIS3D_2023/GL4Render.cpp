@@ -13,6 +13,7 @@ void GL4Render::setupObject(Object* obj)
 			std::vector<glm::uint32>* indices = mesh->getIndices();
 
 			glGenVertexArrays(1, &vbo.id);
+			glBindVertexArray(vbo.id);
 
 			// Crear los buffers para los vertices y los indices
 			glGenBuffers(1, &vbo.v_id);
@@ -25,6 +26,27 @@ void GL4Render::setupObject(Object* obj)
 			// Indices 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo.i_id);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices->size(), indices->data(), GL_STATIC_DRAW);
+
+			//
+			Material* mat = mesh->getMaterial();
+			RenderProgram* program = mat->getProgram();
+
+			glEnableVertexAttribArray(program->varList["vpos"]);
+			glVertexAttribPointer(program->varList["vpos"], 4, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, position));
+
+			if (mat->getNormalMode() == Material::PER_VERTEX)
+			{
+				glEnableVertexAttribArray(program->varList["vnorm"]);
+				glVertexAttribPointer(program->varList["vnorm"], 4, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, normal));
+			}
+
+			if (mat->getTexturing())
+			{
+				glEnableVertexAttribArray(program->varList["vtextcoord"]);
+				glVertexAttribPointer(program->varList["vtextcoord"], 2, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, textCoord));
+			}
+
+			glBindVertexArray(0);
 
 			bufferObjects[mesh->getMeshID()] = vbo;
 		}
@@ -97,15 +119,14 @@ void GL4Render::drawObject(Object* obj)
 
 		// Activar buffers antes de usar el programa
 		VBO_t buffer = bufferObjects[mesh->getMeshID()];
-		glBindVertexArray(buffer.id);
-		glBindBuffer(GL_ARRAY_BUFFER, buffer.v_id);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.i_id);
 
 		// Attributes
 		mat->prepare();
 
 		// Dibujado
+		glBindVertexArray(buffer.id);
 		glDrawElements(GL_TRIANGLES, mesh->getIndices()->size(), GL_UNSIGNED_INT, nullptr); // nullptr porque los datos ya estan copiados
+		glBindVertexArray(0);
 	}
 }
 

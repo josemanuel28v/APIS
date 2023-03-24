@@ -69,12 +69,13 @@ void GLSLShader::setupShaderVarList() {
 	int length = 0;
 
 	glGetProgramiv(programId, GL_ACTIVE_ATTRIBUTES, &count);
-	printf("Active Attributes: %d\n", count);
 	for (int i = 0; i < count; i++)
 	{
 		glGetActiveAttrib(programId, (GLuint)i, bufSize, &length, &size, &type,name);
 		varList[std::string(name)] = glGetAttribLocation(programId,name);
+		std::cout << "Attribute: " << std::string(name) << std::endl;
 	}
+	std::cout << std::endl;
 
 	glGetProgramiv(programId, GL_ACTIVE_UNIFORMS, &count);
 	for (int i = 0; i < count; i++)

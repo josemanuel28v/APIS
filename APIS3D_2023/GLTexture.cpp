@@ -2,10 +2,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-GLTexture::GLTexture()
-{
-	textUnit = textUnitCounter++;
-}
+GLTexture::GLTexture() : Texture()
+{}
 
 GLTexture::GLTexture(std::string fileName) : GLTexture()
 {
@@ -17,9 +15,9 @@ GLuint GLTexture::getID()
     return this->textID;
 }
 
-void GLTexture::bind(GLuint textureUnit)
+void GLTexture::bind()
 {
-    glActiveTexture(GL_TEXTURE0 + textureUnit);
+    glActiveTexture(GL_TEXTURE0 + textUnit);
     glBindTexture(GL_TEXTURE_2D, textID);
 }
 

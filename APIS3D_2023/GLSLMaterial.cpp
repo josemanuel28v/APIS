@@ -33,31 +33,16 @@ void GLSLMaterial::prepare()
 {
 	program->use();
 
-	glEnableVertexAttribArray(program->varList["vpos"]);
-	glVertexAttribPointer(program->varList["vpos"], 4, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, position));
-
-	if (normalMode == Material::PER_VERTEX)
+	if (getTexturing())
 	{
-		glEnableVertexAttribArray(program->varList["vnorm"]);
-		glVertexAttribPointer(program->varList["vnorm"], 4, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, normal));
-	}
-
-	if (texturing)
-	{
-		GLTexture* text = dynamic_cast<GLTexture*>(colorMap);
-		colorMap->bind(text->getTextureUnit());
-
-		glEnableVertexAttribArray(program->varList["vtextcoord"]);
-		glVertexAttribPointer(program->varList["vtextcoord"], 2, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, textCoord));
-
-		program->setTexture2D("colorText", text->getTextureUnit());
+		colorMap->bind();
+		program->setTexture2D("colorText", colorMap->getTextureUnit());
 	}
 
 	// Uniforms
 	program->setMatrix("model", System::getModelMatrix());
 	program->setMatrix("view", System::getCamera()->getView());
 	program->setMatrix("proj", System::getCamera()->getProjection());
-
 	program->setVec3("eyePos", System::getCamera()->getPosition());
 	program->setVec3("ambient", System::getAmbient());
 	program->setInt("texturing", (int)texturing);

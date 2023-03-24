@@ -14,12 +14,7 @@ public:
 	GLTexture();
 	GLTexture(std::string fileName);
 	virtual GLuint getID() override;
-	virtual void bind(GLuint textureUnit) override;
+	virtual void bind() override;
 	virtual void load(std::string fileName) override;
-	unsigned getTextureUnit() { return textUnit; }
-
-private:
-	unsigned textUnit;
-	inline static unsigned textUnitCounter = 0;
 };
 
