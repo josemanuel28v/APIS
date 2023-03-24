@@ -26,6 +26,7 @@ public:
 
 	virtual void loadPrograms(std::vector<std::string> fileNames) = 0;
 	virtual void prepare() = 0;
+	virtual void prepareInstanced() = 0;
 
 	virtual void setTexturing(bool texturing);
 	virtual void setLighting(bool lighting);

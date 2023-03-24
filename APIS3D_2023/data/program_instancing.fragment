@@ -1,0 +1,22 @@
+#version 330
+
+uniform sampler2D colorText;
+uniform int texturing;
+uniform vec4 baseColor;
+
+in vec2 ftextcoord;
+
+out vec4 fragColor;
+
+void main()
+{
+	vec4 objectColor = baseColor;
+
+	if (texturing == 1)
+	{
+		objectColor = objectColor * texture2D(colorText,ftextcoord);
+	}	
+
+	fragColor = objectColor;
+}
+

@@ -84,7 +84,7 @@ void System::mainLoop()
 	// Setup emitters particles
 	for (const auto& emitter : *emitters)
 	{
-		render->setupObject(emitter->getPrototypeParticle());
+		render->setupObjectInstanced(emitter->getPrototypeParticle(), emitter->getNumParticles());
 	}
 
 	while (!end) 
@@ -115,11 +115,12 @@ void System::mainLoop()
 		for (auto& emitter : *emitters)
 		{
 			emitter->step(t.getDeltaTime());
-			for (auto& particle : *emitter->getParticleList())
+			/*for (auto& particle : *emitter->getParticleList())
 			{
 				particle->step(t.getDeltaTime());
 				render->drawObject(particle);
-			}
+			}*/
+			render->drawObjectInstanced(emitter->getPrototypeParticle(), emitter->getNumParticles(), emitter->getMVPArray());
 		}
 
 		// Dibujar objetos

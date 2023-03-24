@@ -11,5 +11,6 @@ public:
 	GLSLMaterial();
 	virtual void loadPrograms(std::vector<std::string> fileNames) override;
 	virtual void prepare() override;
+	virtual void prepareInstanced() override;
 };
 

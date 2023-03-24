@@ -14,7 +14,7 @@ int main(int argc, char** argv)
     FactoryEngine::SetSelectedInputBackend(FactoryEngine::InputBackend::GLFW);
 
     // Inicializar cámara
-    glm::vec3 position = glm::vec3(0.0f, 0.0f, 25.0f);
+    glm::vec3 position = glm::vec3(0.0f, 5.0f, 5.0f);
     glm::vec3 lookAt = glm::vec3(0.0f, 0.0f, 0.0f);
     Camera* camera = new CameraKeyboard(Camera::ProjectionType::PERSPECTIVE, position, glm::vec3(0.0f, 1.0f, 0.0f), lookAt);
      
@@ -46,6 +46,9 @@ int main(int argc, char** argv)
     flameEmitter->setVelocityRange(glm::vec3(-1.0f, 5.0f, -1.0f), glm::vec3(1.0f, 10.0f, 1.0f));
     flameEmitter->setSpinVelocityRange(glm::radians(0.0f), glm::radians(0.0f));
     flameEmitter->setScaleRange(0.025f, 0.1f);
+
+    smokeEmitter->setMaxParticles(200);
+    flameEmitter->setMaxParticles(200);
 
     System::addObject(totem);
     System::addEmitter(smokeEmitter);

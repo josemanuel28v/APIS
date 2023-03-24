@@ -205,16 +205,31 @@
     <ClInclude Include="vertex_t.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="data\asian_town.msh" />
-    <None Include="data\default.fragment" />
-    <None Include="data\default.vertex" />
-    <None Include="data\program.fragment" />
-    <None Include="data\program.vertex" />
+    <Image Include="data\asian_town.png" />
+    <Image Include="data\b04f1d22.dds.jpg" />
+    <Image Include="data\b3fd6310.dds.jpg" />
+    <Image Include="data\c1d75c83.dds.jpg" />
+    <Image Include="data\c7b38140.dds.jpg" />
+    <Image Include="data\flame.png" />
+    <Image Include="data\front.png" />
+    <Image Include="data\smoke.png" />
+    <Image Include="data\top.png" />
+    <Image Include="data\_5259538b.dds.jpg" />
+    <Image Include="data\_7ddf0ee9.dds.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="data\asian_town.png" />
-    <Image Include="data\front.png" />
-    <Image Include="data\top.png" />
+    <None Include="data\asian_town.msh" />
+    <None Include="data\bunny.msh" />
+    <None Include="data\column.msh" />
+    <None Include="data\default.fragment" />
+    <None Include="data\default.vertex" />
+    <None Include="data\flame.msh" />
+    <None Include="data\ground.msh" />
+    <None Include="data\program.fragment" />
+    <None Include="data\program.vertex" />
+    <None Include="data\program_instancing.fragment" />
+    <None Include="data\program_instancing.vertex" />
+    <None Include="data\smoke.msh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

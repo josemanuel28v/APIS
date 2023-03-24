@@ -96,4 +96,54 @@ void GLSLMaterial::prepare()
 	}
 }
 
+void GLSLMaterial::prepareInstanced()
+{
+	program->use();
+
+	if (getTexturing())
+	{
+		colorMap->bind();
+		program->setTexture2D("colorText", colorMap->getTextureUnit());
+	}
+
+	// Uniforms
+
+	program->setInt("texturing", (int)texturing);
+	program->setVec4("baseColor", color);
+
+	// Depth test
+	depthWrite ? glDepthMask(GL_TRUE) : glDepthMask(GL_FALSE);
+
+	// Culling test
+	if (culling)
+	{
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+	}
+	else
+	{
+		glDisable(GL_CULL_FACE);
+	}
+
+	// Modo de mezclado de colores
+	switch (blendMode)
+	{
+	case SOLID:
+		glBlendFunc(GL_ONE, GL_ZERO);
+		break;
+
+	case ALPHA:
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		break;
+
+	case MUL:
+		glBlendFunc(GL_DST_COLOR, GL_ZERO);
+		break;
+
+	case ADD:
+		glBlendFunc(GL_ONE, GL_ONE);
+		break;
+	}
+}
+
 

@@ -184,13 +184,48 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="data\program.fragment">
+    <Image Include="data\_7ddf0ee9.dds.jpg">
       <Filter>data</Filter>
-    </None>
-    <None Include="data\program.vertex">
+    </Image>
+    <Image Include="data\_5259538b.dds.jpg">
       <Filter>data</Filter>
-    </None>
+    </Image>
+    <Image Include="data\asian_town.png">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\b3fd6310.dds.jpg">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\b04f1d22.dds.jpg">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\c1d75c83.dds.jpg">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\c7b38140.dds.jpg">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\flame.png">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\front.png">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\smoke.png">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\top.png">
+      <Filter>data</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="data\asian_town.msh">
+      <Filter>data</Filter>
+    </None>
+    <None Include="data\bunny.msh">
+      <Filter>data</Filter>
+    </None>
+    <None Include="data\column.msh">
       <Filter>data</Filter>
     </None>
     <None Include="data\default.fragment">
@@ -199,16 +234,26 @@
     <None Include="data\default.vertex">
       <Filter>data</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="data\asian_town.png">
+    <None Include="data\flame.msh">
       <Filter>data</Filter>
-    </Image>
-    <Image Include="data\front.png">
+    </None>
+    <None Include="data\ground.msh">
       <Filter>data</Filter>
-    </Image>
-    <Image Include="data\top.png">
+    </None>
+    <None Include="data\program.fragment">
       <Filter>data</Filter>
-    </Image>
+    </None>
+    <None Include="data\program.vertex">
+      <Filter>data</Filter>
+    </None>
+    <None Include="data\program_instancing.fragment">
+      <Filter>data</Filter>
+    </None>
+    <None Include="data\program_instancing.vertex">
+      <Filter>data</Filter>
+    </None>
+    <None Include="data\smoke.msh">
+      <Filter>data</Filter>
+    </None>
   </ItemGroup>
 </Project>

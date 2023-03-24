@@ -1,0 +1,13 @@
+#version 330
+
+in vec4 vpos;
+in vec2 vtextcoord;
+in mat4 vmvp;
+
+out vec2 ftextcoord;
+
+void main()
+{
+	ftextcoord = vtextcoord;
+	gl_Position = vmvp * vpos;
+}

@@ -23,11 +23,28 @@ public:
 	bool getAutoFade() { return autoFade; }
 	virtual void step(double deltaTime) override;
 
+	void setMaxParticles(unsigned maxNumParticles) 
+	{
+		if (mvps) delete mvps;
+		this->maxNumParticles = maxNumParticles;
+		mvps = new glm::mat4[maxNumParticles];
+	}
+	unsigned getNumParticles()
+	{
+		return currentNumParticles;
+	}
+
+	glm::mat4* getMVPArray() { return mvps; }
+
 	bool isEmitting();
 
 private:
 	std::list<Particle*>* particles;
 	Particle* prototype;
+
+	unsigned currentNumParticles;
+	unsigned maxNumParticles;
+	glm::mat4* mvps;
 
 	const char* mshFile;
 	float particleAccum;
