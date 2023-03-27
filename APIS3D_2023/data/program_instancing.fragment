@@ -2,15 +2,15 @@
 
 uniform sampler2D colorText;
 uniform int texturing;
-uniform vec4 baseColor;
 
 in vec2 ftextcoord;
+in vec4 fcolor;
 
 out vec4 fragColor;
 
 void main()
 {
-	vec4 objectColor = baseColor;
+	vec4 objectColor = fcolor;
 
 	if (texturing == 1)
 	{

@@ -11,7 +11,19 @@ Emitter::Emitter(const char* mshFile, bool autoFade)
 	this->emitting = true;
 
 	this->prototype = new Particle(mshFile, glm::vec3(0.0f), 0.0f, 0.0f, 0.0f, false);
-	this->mvps = nullptr;
+}
+
+Emitter::~Emitter()
+{
+	if (this->prototype) delete this->prototype;
+	if (this->particles)
+	{
+		for (Particle* p : *this->particles)
+		{
+			if (p) delete p;
+		}
+		delete this->particles;
+	}
 }
 
 void Emitter::setRateRange(float min, float max)
@@ -97,15 +109,10 @@ void Emitter::step(double deltaTime)
 	}
 
 	particles->clear();
-
-	currentNumParticles = glm::min((unsigned)particles->size(), maxNumParticles);
-	unsigned i = 0;
-	for (auto it = distMap.begin(); i < currentNumParticles; ++it, ++i) // si no se recorre entero el distMap se pierden particulas, esto pasa cuando el numero de particulas es mayor a maxNumParticles se podrían seguir introduciendo en particles y solo actualizar las matrices mvp que sea posible
+	
+	for (auto it = distMap.begin(); it != distMap.end(); ++it) 
 	{
 		particles->push_back(it->second);
-
-		it->second->computeModelMatrix();
-		mvps[i] = it->second->getModelMt();
 	}
 }
 

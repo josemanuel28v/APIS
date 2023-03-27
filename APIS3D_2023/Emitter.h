@@ -9,42 +9,24 @@ class Emitter : public Entity
 {
 public:
 	Emitter(const char* mshFile, bool autoFade);
+	virtual ~Emitter();
+	virtual void setRateRange(float min, float max);
+	virtual void setVelocityRange(const glm::vec3& min, const glm::vec3& max);
+	virtual void setSpinVelocityRange(float min, float max);
+	virtual void setScaleRange(float min, float max);
+	virtual void setLifeTimeRange(float min, float max);
+	virtual void setColorRange(const glm::vec4& min, const glm::vec4& max);
+	virtual void emit(bool emitting) { this->emitting = emitting; }
 
-	void setRateRange(float min, float max);
-	void setVelocityRange(const glm::vec3& min, const glm::vec3& max);
-	void setSpinVelocityRange(float min, float max);
-	void setScaleRange(float min, float max);
-	void setLifeTimeRange(float min, float max);
-	void setColorRange(const glm::vec4& min, const glm::vec4& max);
-	void emit(bool emitting);
-
-	Particle* getPrototypeParticle() { return prototype; }
-	std::list<Particle*>* getParticleList();
-	bool getAutoFade() { return autoFade; }
+	virtual Particle* getPrototypeParticle() { return prototype; }
+	virtual std::list<Particle*>* getParticleList();
+	virtual bool getAutoFade() { return autoFade; }
+	bool isEmitting();
 	virtual void step(double deltaTime) override;
 
-	void setMaxParticles(unsigned maxNumParticles) 
-	{
-		if (mvps) delete mvps;
-		this->maxNumParticles = maxNumParticles;
-		mvps = new glm::mat4[maxNumParticles];
-	}
-	unsigned getNumParticles()
-	{
-		return currentNumParticles;
-	}
-
-	glm::mat4* getMVPArray() { return mvps; }
-
-	bool isEmitting();
-
-private:
+protected:
 	std::list<Particle*>* particles;
 	Particle* prototype;
-
-	unsigned currentNumParticles;
-	unsigned maxNumParticles;
-	glm::mat4* mvps;
 
 	const char* mshFile;
 	float particleAccum;

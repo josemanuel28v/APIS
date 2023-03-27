@@ -7,6 +7,7 @@
 #include "Object.h"
 #include "Light.h"
 #include "Emitter.h"
+#include "InstancedEmitter.h"
 
 class TimeManager {
 
@@ -44,6 +45,7 @@ public:
 	static std::vector<Object*>* objects;
 	static std::vector<Light*>* lights;
 	static std::vector<Emitter*>* emitters;
+	static std::vector<InstancedEmitter*>* instancedEmitters;
 	static bool end;
 	static glm::mat4 modelMatrix;
 	static glm::vec3 ambient;
@@ -56,6 +58,7 @@ public:
 	static void addLight(Light* light);
 	static void addObject(Object* obj);
 	static void addEmitter(Emitter* emitter);
+	static void addInstancedEmitter(InstancedEmitter* emitter);
 
 	static void removeLight(int lightIdx);
 	static void removeObject(int objectIdx);

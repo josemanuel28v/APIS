@@ -21,7 +21,7 @@ public:
 	virtual void swapBuffers() override;
 
 	virtual void setupObjectInstanced(Object* obj, unsigned numInstances) override {};
-	virtual void drawObjectInstanced(Object* obj, unsigned numInstances, glm::mat4* mvps) override {};
+	virtual void drawObjectInstanced(Object* obj, unsigned numInstances, glm::mat4* mvps, glm::vec4* colors) override {};
 
 	// Duda: Necesario para inicializar el glfwSetKeyCallback en glfwInput
 	virtual GLFWwindow* getWindow() { return window; }

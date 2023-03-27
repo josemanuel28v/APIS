@@ -37,8 +37,10 @@ void Particle::step(double deltaTime)
 	position += glm::vec4(velocity * (float)deltaTime, 1.0f);
 	rotation.z += spin * deltaTime;
 	lifeTime -= deltaTime;
+}
 
-	// Modificar el alpha del material
+void Particle::updateAlpha()
+{
 	// Deberia setearse el alpha del color de la mesh justo antes de pintar si se comparte Mesh
 	if (autoFade)
 	{

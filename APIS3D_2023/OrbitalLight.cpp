@@ -13,6 +13,10 @@ OrbitalLight::OrbitalLight(glm::vec4 direction, glm::vec3 center, glm::vec3 colo
 
 void OrbitalLight::step(double deltaTime)
 {
-	position.x = center.x + radius * cos(deltaTime);
-	position.z = center.z + radius * sin(deltaTime);
+	static float angle = 0;
+
+	position.x = center.x + radius * cos(angle);
+	position.z = center.z + radius * sin(angle);
+
+	angle += deltaTime;
 }

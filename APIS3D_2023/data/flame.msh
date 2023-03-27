@@ -3,8 +3,8 @@
 		<buffer>
 			<material>
 				<texture>flame.png</texture>
-				<vShader>program_instancing.vertex</vShader>
-				<fShader>program_instancing.fragment</fShader>
+				<vShader>program.vertex</vShader>
+				<fShader>program.fragment</fShader>
 				<light>false</light>
 				<blendMode>alpha</blendMode>
 				<culling>false</culling>

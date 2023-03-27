@@ -10,6 +10,7 @@ public:
 	float getRemainingLifeTime() const;
 	float getTotalLifeTime() const;
 	virtual void step(double deltaTime) override;
+	void updateAlpha();
 
 private:
 	glm::vec3 velocity;

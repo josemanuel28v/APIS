@@ -1,13 +1,16 @@
 #version 330
 
-in vec4 vpos;
-in vec2 vtextcoord;
 in mat4 vmvp;
+in vec4 vpos;
+in vec4 vcolor;
+in vec2 vtextcoord;
 
+out vec4 fcolor;
 out vec2 ftextcoord;
 
 void main()
 {
+	fcolor = vcolor;
 	ftextcoord = vtextcoord;
 	gl_Position = vmvp * vpos;
 }

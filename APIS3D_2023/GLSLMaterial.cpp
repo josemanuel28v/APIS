@@ -105,11 +105,7 @@ void GLSLMaterial::prepareInstanced()
 		colorMap->bind();
 		program->setTexture2D("colorText", colorMap->getTextureUnit());
 	}
-
-	// Uniforms
-
 	program->setInt("texturing", (int)texturing);
-	program->setVec4("baseColor", color);
 
 	// Depth test
 	depthWrite ? glDepthMask(GL_TRUE) : glDepthMask(GL_FALSE);

@@ -10,6 +10,7 @@ InputManager* System::inputManager = nullptr;
 std::vector<Object*>* System::objects = nullptr;
 std::vector<Light*>* System::lights = nullptr;
 std::vector<Emitter*>* System::emitters = nullptr;
+std::vector<InstancedEmitter*>* System::instancedEmitters = nullptr;
 glm::vec3 System::ambient = glm::vec3(0.1f, 0.1f, 0.1f);
 bool System::end = false;
 glm::mat4 System::modelMatrix;
@@ -22,6 +23,7 @@ void System::initSystem()
 	objects = new std::vector<Object*>();
 	lights = new std::vector<Light*>();
 	emitters = new std::vector<Emitter*>();
+	instancedEmitters = new std::vector<InstancedEmitter*>();
 
 	render->init();
 
@@ -54,6 +56,11 @@ void System::addEmitter(Emitter* emitter)
 	emitters->push_back(emitter);
 }
 
+void System::addInstancedEmitter(InstancedEmitter* emitter)
+{
+	instancedEmitters->push_back(emitter);
+}
+
 void System::removeObject(int objectIdx)
 {
 	delete (*objects)[objectIdx];
@@ -75,14 +82,17 @@ void System::mainLoop()
 {
 	TimeManager t;
 
-	// Setup objects
-	for (const auto& obj : *objects)
+	for (auto obj : *objects)
 	{
 		render->setupObject(obj);
 	}
 
-	// Setup emitters particles
-	for (const auto& emitter : *emitters)
+	for (auto emitter : *emitters)
+	{
+		render->setupObject(emitter->getPrototypeParticle());
+	}
+
+	for (auto emitter : *instancedEmitters)
 	{
 		render->setupObjectInstanced(emitter->getPrototypeParticle(), emitter->getNumParticles());
 	}
@@ -99,28 +109,33 @@ void System::mainLoop()
 		camera->step(t.getDeltaTime());
 
 		// Actualzar objetos
-		for (auto& object : *objects) 
+		for (auto object : *objects) 
 		{
 			object->step(t.getDeltaTime());
 		}
 
 		// Actualizar luces
-		for (auto& light : *lights)
+		for (auto light : *lights)
 		{
-			light->step(t.getTime());
+			light->step(t.getDeltaTime());
 		}
 
 		// Actualizar emisores
-		std::vector<Object*> particles(1);
-		for (auto& emitter : *emitters)
+		for (auto emitter : *emitters)
 		{
 			emitter->step(t.getDeltaTime());
-			/*for (auto& particle : *emitter->getParticleList())
+			for (auto& particle : *emitter->getParticleList())
 			{
-				particle->step(t.getDeltaTime());
+				particle->updateAlpha();
 				render->drawObject(particle);
-			}*/
-			render->drawObjectInstanced(emitter->getPrototypeParticle(), emitter->getNumParticles(), emitter->getMVPArray());
+			}
+		}
+
+		// Actualizar emisores (instancing)
+		for (auto emitter : *instancedEmitters)
+		{
+			emitter->step(t.getDeltaTime());
+			render->drawObjectInstanced(emitter->getPrototypeParticle(), emitter->getNumParticles(), emitter->getMVPArray(), emitter->getColorArray());
 		}
 
 		// Dibujar objetos
@@ -207,17 +222,35 @@ void System::releaseMemory()
 		delete light;
 	}
 
+	// Liberar memoria del contenido del vector emitters
+	for (Emitter* emitter : *emitters)
+	{
+		delete emitter;
+	}
+
+	// Liberar memoria del contenido del vector instanced emitters
+	for (InstancedEmitter* emitter : *instancedEmitters)
+	{
+		delete emitter;
+	}
+
 	// Vaciar vectores
 	objects->clear();
 	lights->clear();
+	emitters->clear();
+	instancedEmitters->clear();
 
 	// Liberar memoria del los vectores
 	delete objects;
 	delete lights;
+	delete emitters;
+	delete instancedEmitters;
 
 	camera = nullptr;
 	render = nullptr;
 	inputManager = nullptr;
 	objects = nullptr;
 	lights = nullptr;
+	emitters = nullptr;
+	instancedEmitters = nullptr;
 }

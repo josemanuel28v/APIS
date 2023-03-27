@@ -16,7 +16,7 @@ public:
 	virtual void swapBuffers() = 0;
 
 	virtual void setupObjectInstanced(Object* obj, unsigned numInstances) = 0;
-	virtual void drawObjectInstanced(Object* obj, unsigned numInstances, glm::mat4* mvps) = 0;
+	virtual void drawObjectInstanced(Object* obj, unsigned numInstances, glm::mat4* mvps, glm::vec4* colors) = 0;
 
 	virtual int getWidth() = 0;
 	virtual int getHeigth() = 0;
