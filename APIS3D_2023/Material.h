@@ -14,7 +14,6 @@ public:
 		NONE = 0,
 		PER_VERTEX = 1,
 		FROM_MAP = 2
-
 	};
 
 	enum BlendMode
@@ -35,9 +34,15 @@ public:
 	virtual void setBlendMode(BlendMode blendMode);
 	virtual void setNormalMode(NormalMode normalMode);
 	virtual void setTexture(Texture* colorMap);
+	virtual void setRefractionMap(Texture* refractionMap);
+	virtual void setReflectionMap(Texture* reflectionMap);
+	virtual void setNormalMap(Texture* normalMap);
 	virtual void setProgram(RenderProgram* program);
 	virtual void setColor(glm::vec4 color);
 	virtual void setShininess(uint8_t shininess);
+	virtual void setRefraction(bool refraction);
+	virtual void setReflection(bool reflection);
+	virtual void setRefractCoef(float refractCoef);
 
 	virtual bool getTexturing() const;
 	virtual bool getLighting() const;
@@ -46,19 +51,30 @@ public:
 	virtual BlendMode getBlendMode() const;
 	virtual NormalMode getNormalMode() const;
 	virtual Texture* getTexture() const;
+	virtual Texture* getRefractionMap() const;
+	virtual Texture* getReflectionMap() const;
+	virtual Texture* getNormalMap() const;
 	virtual RenderProgram* getProgram() const;
 	virtual glm::vec4 getColor() const;
 	virtual uint8_t getShininess() const;
+	virtual bool getRefraction() const;
+	virtual bool getReflection() const;
+	virtual float getRefractCoef() const;
 
 protected:
 
 	RenderProgram* program = nullptr;
 	Texture* colorMap = nullptr;
 	Texture* normalMap = nullptr;
+	Texture* refractionMap = nullptr;
+	Texture* reflectionMap = nullptr;
 
 	glm::vec4 color = glm::vec4(1.0f);
 	uint8_t shininess = 50;
+	float refractCoef = 0;
 
+	bool refraction = false;
+	bool reflection = false;
 	bool texturing = false;
 	bool lighting = false;
 	bool culling = false;

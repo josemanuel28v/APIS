@@ -1,6 +1,6 @@
 #include "Texture.h"
 
-glm::ivec2 Texture::getSize()
+glm::ivec2 Texture::getSize() const 
 {
     return size;
 }

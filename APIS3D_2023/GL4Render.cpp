@@ -8,7 +8,7 @@ void GL4Render::setupObject(Object* obj)
 		// Si no existe el id de la mesh en el mapa bufferObjects se añade
 		if (bufferObjects.find(mesh->getMeshID()) == bufferObjects.end())
 		{
-			VBO_t vbo;
+			VAO_t vbo;
 			std::vector<vertex_t>* vertices = mesh->getVertices();
 			std::vector<glm::uint32>* indices = mesh->getIndices();
 			Material* mat = mesh->getMaterial();
@@ -37,6 +37,15 @@ void GL4Render::setupObject(Object* obj)
 				glEnableVertexAttribArray(program->varList["vnorm"]);
 				glVertexAttribPointer(program->varList["vnorm"], 4, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, normal));
 			}
+			else if (mat->getNormalMode() == Material::FROM_MAP)
+			{
+				// Aunque las normales vengan de un mapa de normales se necesitan las normales por vértice para calcular la TBN
+				glEnableVertexAttribArray(program->varList["vnorm"]);
+				glVertexAttribPointer(program->varList["vnorm"], 4, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, normal));
+
+				glEnableVertexAttribArray(program->varList["vtan"]);
+				glVertexAttribPointer(program->varList["vtan"], 4, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, tangent));
+			}
 
 			if (mat->getTexturing())
 			{
@@ -58,7 +67,7 @@ void GL4Render::setupObjectInstanced(Object* obj, unsigned numInstances)
 		// Si no existe el id de la mesh en el mapa bufferObjects se añade
 		if (bufferObjects.find(mesh->getMeshID()) == bufferObjects.end())
 		{
-			VBO_t vbo;
+			VAO_t vbo;
 			std::vector<vertex_t>* vertices = mesh->getVertices();
 			std::vector<glm::uint32>* indices = mesh->getIndices();
 			Material* mat = mesh->getMaterial();
@@ -134,7 +143,7 @@ void GL4Render::removeObject(Object* obj)
 		// Si el vbo asociado al meshID existe en bufferObjects se libera la memoria de sus buffers
 		if (bufferObjects.find(meshID) != bufferObjects.end())
 		{
-			const VBO_t& vbo = bufferObjects[meshID];
+			const VAO_t& vbo = bufferObjects[meshID];
 			glDeleteVertexArrays(1, &vbo.id);
 			glDeleteBuffers(1, &vbo.v_id);
 			glDeleteBuffers(1, &vbo.i_id);
@@ -152,7 +161,7 @@ void GL4Render::drawObject(Object* obj)
 		Material* mat = mesh->getMaterial();
 
 		// Activar buffers antes de usar el programa
-		VBO_t buffer = bufferObjects[mesh->getMeshID()];
+		VAO_t buffer = bufferObjects[mesh->getMeshID()];
 
 		// Attributes
 		mat->prepare();
@@ -171,7 +180,7 @@ void GL4Render::drawObjectInstanced(Object* obj, unsigned numInstances, glm::mat
 		Material* mat = mesh->getMaterial();
 
 		// Activar buffers antes de usar el programa
-		VBO_t buffer = bufferObjects[mesh->getMeshID()];
+		VAO_t buffer = bufferObjects[mesh->getMeshID()];
 
 		// Attributes
 		mat->prepareInstanced();

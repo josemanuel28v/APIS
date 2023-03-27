@@ -73,7 +73,7 @@ void GLSLShader::setupShaderVarList() {
 	{
 		glGetActiveAttrib(programId, (GLuint)i, bufSize, &length, &size, &type,name);
 		varList[std::string(name)] = glGetAttribLocation(programId,name);
-		std::cout << "Attribute: " << std::string(name) << std::endl;
+		//std::cout << "Attribute: " << std::string(name) << std::endl;
 	}
 	std::cout << std::endl;
 
@@ -82,6 +82,7 @@ void GLSLShader::setupShaderVarList() {
 	{
 		glGetActiveUniform(programId, (GLuint)i, bufSize, &length, &size,&type, name);
 		varList[std::string(name)] = glGetUniformLocation(programId,name);
+		std::cout << "Uniform: " << std::string(name) << std::endl;
 	}
 }
 

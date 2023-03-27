@@ -1,7 +1,5 @@
 #include "Material.h"
 
-
-
 Material::~Material()
 {
     if (colorMap) delete colorMap;
@@ -48,6 +46,21 @@ void Material::setTexture(Texture* colorMap)
     this->colorMap = colorMap;
 }
 
+void Material::setRefractionMap(Texture* refractionMap)
+{
+    this->refractionMap = refractionMap;
+}
+
+void Material::setReflectionMap(Texture* reflectionMap)
+{
+    this->reflectionMap = reflectionMap;
+}
+
+void Material::setNormalMap(Texture* normalMap)
+{
+    this->normalMap = normalMap;
+}
+
 /* 
     Si se comparten programas entre materiales entonces el destructor no sabrá si ese program se ha destruido o no por lo que habrá errores de ejecución
     esto se podría tratar con punteros inteligentes (shared_ptr)
@@ -65,6 +78,21 @@ void Material::setColor(glm::vec4 color)
 void Material::setShininess(uint8_t shininess)
 {
     this->shininess = shininess;
+}
+
+void Material::setRefraction(bool refraction)
+{
+    this->refraction = refraction;
+}
+
+void Material::setReflection(bool reflection)
+{
+    this->reflection = reflection;
+}
+
+void Material::setRefractCoef(float refractCoef)
+{
+    this->refractCoef = refractCoef;
 }
 
 bool Material::getTexturing() const
@@ -102,6 +130,21 @@ Texture* Material::getTexture() const
     return colorMap;
 }
 
+Texture* Material::getRefractionMap() const
+{
+    return refractionMap;
+}
+
+Texture* Material::getReflectionMap() const
+{
+    return reflectionMap;
+}
+
+Texture* Material::getNormalMap() const
+{
+    return normalMap;
+}
+
 RenderProgram* Material::getProgram() const
 {
     return program;
@@ -115,5 +158,20 @@ glm::vec4 Material::getColor() const
 uint8_t Material::getShininess() const
 {
     return shininess;
+}
+
+bool Material::getRefraction() const
+{
+    return refraction;
+}
+
+bool Material::getReflection() const
+{
+    return reflection;
+}
+
+float Material::getRefractCoef() const
+{
+    return refractCoef;
 }
 

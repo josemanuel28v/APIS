@@ -35,8 +35,63 @@ void GLSLMaterial::prepare()
 
 	if (getTexturing())
 	{
-		colorMap->bind();
-		program->setTexture2D("colorText", colorMap->getTextureUnit());
+		if (colorMap)
+		{
+			Texture::TextureType textType = colorMap->getType();
+
+			program->setInt("textType", (int)textType);
+
+			switch (textType)
+			{
+			case Texture::COLOR2D:
+				colorMap->bind(0);
+				glDisable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+				program->setTexture2D("colorText", 0);
+				program->setTexture2D("cubeText", 1);
+				break;
+
+			case Texture::COLOR3D:
+				colorMap->bind(1);
+				glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+				program->setTexture2D("colorText", 0);
+				program->setTexture2D("cubeText", 1);
+				break;
+
+				/*
+					Necesario setear colorText y cubeText en ambos casos
+				*/
+			}
+		}
+		else if (getReflection())
+		{
+			Texture::TextureType textType = reflectionMap->getType();
+			program->setInt("textType", (int)textType);
+
+			reflectionMap->bind(1);
+			glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+			program->setTexture2D("colorText", 0);
+			program->setTexture2D("cubeText", 1);
+		}
+		else if (getRefraction())
+		{
+			Texture::TextureType textType = refractionMap->getType();
+			program->setInt("textType", (int)textType);
+
+			refractionMap->bind(1);
+			glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+			program->setTexture2D("colorText", 0);
+			program->setTexture2D("cubeText", 1);
+		}
+
+		/*
+			De momento un objeto solo podrá tener color de su propia textura o de un cubemap reflejado o refractado, no a la vez
+		*/
+	}
+
+	if (normalMode == FROM_MAP)
+	{
+		normalMap->bind(2);
+		program->setTexture2D("normalText", 2);// normalMap->getTextureUnit());
 	}
 
 	// Uniforms
@@ -51,6 +106,9 @@ void GLSLMaterial::prepare()
 	program->setInt("shininess", shininess);
 	program->setVec4("baseColor", color);
 	program->setInt("numLights", System::lights->size());
+	program->setInt("computeReflect", (int)reflection);
+	program->setInt("computeRefract", (int)refraction);
+	program->setFloat("refractCoef", refractCoef);
 
 	for (int i = 0; i < System::lights->size(); i++)
 	{
@@ -77,11 +135,10 @@ void GLSLMaterial::prepare()
 
 	// Modo de mezclado de colores
 	switch (blendMode)
-	{
-	case SOLID: 
+	{	
+	case SOLID:
 		glBlendFunc(GL_ONE, GL_ZERO);
 		break;
-	
 	case ALPHA: 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		break;
@@ -102,8 +159,8 @@ void GLSLMaterial::prepareInstanced()
 
 	if (getTexturing())
 	{
-		colorMap->bind();
-		program->setTexture2D("colorText", colorMap->getTextureUnit());
+		colorMap->bind(0);
+		program->setTexture2D("colorText", 0);
 	}
 	program->setInt("texturing", (int)texturing);
 

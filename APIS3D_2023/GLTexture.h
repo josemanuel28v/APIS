@@ -13,8 +13,11 @@ class GLTexture: public Texture
 public:
 	GLTexture();
 	GLTexture(std::string fileName);
-	virtual GLuint getID() override;
-	virtual void bind() override;
+	GLTexture(std::string left, std::string right, std::string front, std::string back, std::string top, std::string bottom);
+	virtual void bind(unsigned int) override;
 	virtual void load(std::string fileName) override;
+	virtual void load(std::string left, std::string right, std::string front, std::string back, std::string top, std::string bottom) override;
+	virtual GLuint getID() const override;
+
 };
 

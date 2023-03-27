@@ -47,12 +47,58 @@ void Object3D::loadDataFromFile(const char* fileName)
                 mat->setShininess(bufferNode.child("material").child("shininess").text().as_int());
             }
 
+            // Reflection
+            if (bufferNode.child("material").child("reflection"))
+            {
+                mat->setReflection(bufferNode.child("material").child("reflection").text().as_bool());
+            }
+
+            // Refraction
+            if (bufferNode.child("material").child("refraction"))
+            {
+                if (bufferNode.child("material").child("refractCoef"))
+                {
+                    mat->setRefraction(bufferNode.child("material").child("refraction").text().as_bool());
+                    mat->setRefractCoef(bufferNode.child("material").child("refractCoef").text().as_float());
+                }
+            }
+
             // Texturas
             if (bufferNode.child("material").child("texture"))
             {
-                std::string textureFile = path + bufferNode.child("material").child("texture").text().as_string();
-                mat->setTexture(new GLTexture(textureFile));
-                mat->setTexturing(true);
+                // COLOR3D
+                auto cubeMapNode = bufferNode.child("material").child("texture").attribute("cubeMap");
+                if (cubeMapNode && cubeMapNode.as_bool())
+                {
+                    std::vector<std::string> cubeMapFiles = utils::splitString<std::string>(bufferNode.child("material").child("texture").text().as_string(), ',');
+                    Texture* texture = FactoryEngine::getNewTexture();
+                    texture->load(path + cubeMapFiles[0], path + cubeMapFiles[1], path + cubeMapFiles[2], path + cubeMapFiles[3], path + cubeMapFiles[4], path + cubeMapFiles[5]);
+
+                    if (mat->getReflection())           // Objeto que refleja el cubemap
+                    {
+                        mat->setReflectionMap(texture);
+                    }
+                    else if (mat->getRefraction())      // Objeto que refracta el cubemap
+                    {
+                        mat->setRefractionMap(texture);
+                    }
+                    else                                // Skybox
+                    {
+                        mat->setTexture(texture);
+                    }
+                    
+                    mat->setTexturing(true);
+                }
+                // COLOR2D
+                else
+                {
+                    std::string textureFile = path + bufferNode.child("material").child("texture").text().as_string();
+
+                    Texture* texture = FactoryEngine::getNewTexture();
+                    texture->load(textureFile);
+                    mat->setTexture(texture);
+                    mat->setTexturing(true);
+                }
             }
 
             // Shaders
@@ -106,6 +152,7 @@ void Object3D::loadDataFromFile(const char* fileName)
             std::vector<float> vList = utils::splitString<float>(bufferNode.child("coords").text().as_string(), ',');
             std::vector<float> tcList;
             std::vector<float> nList;
+            std::vector<float> tanList;
 
             // Coordenadas de textura
             if (mat->getTexturing())
@@ -120,9 +167,27 @@ void Object3D::loadDataFromFile(const char* fileName)
                 nList = utils::splitString<float>(bufferNode.child("normals").text().as_string(), ',');
             }
 
+            // Normal map (en caso de existir normalMap, sobreescribe el modo PER_VERTEX)
+            if (bufferNode.child("material").child("normalTexture"))
+            {
+                std::string textureFile = path + bufferNode.child("material").child("normalTexture").text().as_string();
+
+                Texture* texture = FactoryEngine::getNewTexture();
+                texture->load(textureFile);
+                mat->setNormalMap(texture);
+                mat->setNormalMode(Material::FROM_MAP);
+            }
+
+            // Tangentes
+            if (bufferNode.child("tangents"))
+            {
+                tanList = utils::splitString<float>(bufferNode.child("tangents").text().as_string(), ',');
+            }
+
             auto coord = vList.begin();
             auto texCoord = tcList.begin();
             auto normals = nList.begin();
+            auto tans = tanList.begin();
 
             while (coord != vList.end())
             {
@@ -145,6 +210,14 @@ void Object3D::loadDataFromFile(const char* fileName)
                     v.normal.y = *normals++;
                     v.normal.z = *normals++;
                     v.normal.w = 0.0f;
+                }
+
+                if (tanList.size() > 0)
+                {
+                    v.tangent.x = *tans++;
+                    v.tangent.y = *tans++;
+                    v.tangent.z = *tans++;
+                    v.tangent.w = 0.0f;
                 }
 
                 mesh->addVertex(v);

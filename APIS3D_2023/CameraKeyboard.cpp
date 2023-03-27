@@ -1,7 +1,7 @@
 #include "CameraKeyboard.h"
 #include "System.h"
 
-CameraKeyboard::CameraKeyboard(ProjectionType type, glm::vec3 position, glm::vec3 worldUp, glm::vec3 lookAt) : Camera(type, position, up, lookAt)
+CameraKeyboard::CameraKeyboard(ProjectionType type, glm::vec3 position, glm::vec3 up, glm::vec3 lookAt) : Camera(type, position, up, lookAt)
 {
 
 }

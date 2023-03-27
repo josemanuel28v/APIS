@@ -1,4 +1,5 @@
 #version 330
+#extension GL_NV_shadow_samplers_cube : enable
 
 struct lightInfo 
 {
@@ -10,6 +11,9 @@ struct lightInfo
 
 };
 
+uniform int textType; //
+uniform samplerCube cubeText; //
+uniform sampler2D normalText; 
 uniform sampler2D colorText;
 uniform lightInfo lights[8];
 uniform int numLights;
@@ -26,21 +30,37 @@ uniform vec4 baseColor;
 in vec2 ftextcoord;
 in vec4 fpos;
 in vec4 fnormal;
+in vec3 ftextCube; //
+in mat3 TBN; 
+
 out vec4 fragColor;
 
 void main()
 {
 	// Diferentes combinaciones
 	// Iluminado + no text		 -> colorIluminacion * colorBase
-	// Iluminado + text			 -> colorIluminacion * colorText
-	// No iluminado + text		 -> colorText
+	// Iluminado + text			 -> colorIluminacion * colorBase * colorText
+	// No iluminado + text		 -> colorBase * colorText
 	// No iluminado + no text	 -> colorBase
+
+	// De momento un objeto puede:
+	//		Tener su propia textura 2D (objeto texturizado normal)
+	//		Tener su propia textura 3D (objeto skybox)
+	//		Tener un reflectCubeMap (objeto al que se le pega la reflexion del skybox)
+	//		Tener un refractCubeMap (objeto al que se le pega la refracciion del skybox)
 
 	vec4 objectColor = baseColor;
 
 	if (texturing == 1)
 	{
-		objectColor = objectColor * texture2D(colorText,ftextcoord);
+		if (textType == 0) // Color2D
+		{
+			objectColor = objectColor * texture2D(colorText, ftextcoord);
+		}
+		else if (textType == 1) // Color3D (skybox o objetos reflectantes o refractantes)
+		{
+			objectColor = objectColor * textureCube(cubeText, ftextCube);
+		}
 	}	
 
 	if (lighting == 1)
@@ -53,7 +73,9 @@ void main()
 		}
 		else if (normalMode == 2)	// FROM_MAP
 		{
-			// coger normal del mapa de normales
+			vec3 normalTextValue = texture2D(normalText, ftextcoord).xyz;
+			normalTextValue = normalTextValue * 2.0f - 1.0f;
+			N = normalize(TBN * normalTextValue);
 		}
 
 		float diff = 0.0f;
@@ -81,8 +103,8 @@ void main()
 			float attenuation = 1.0f / (1.0f + lights[i].linearAtt * distance); 
 
 			// Factor de intensidad por defecto 0.5
-			diff += 0.5f * attenuation * max( dot(L,N),0.0f);
-			spec += 0.5f * attenuation * pow(max(dot(R,EYE),0.0f),shininess);
+			diff += attenuation * max( dot(L,N),0.0f);
+			spec += attenuation * pow(max(dot(R,EYE),0.0f),shininess);
 
 			lightColor *= lights[i].color;
 		}

@@ -3,13 +3,14 @@
 #include "common.h"
 #include "GL1Render.h"
 
-struct VBO_t
+struct VAO_t
 {
 	unsigned int id;   // Id del vertex buffer object
 	unsigned int v_id; // Id del buffer de vertices
 	unsigned int i_id; // Id del buffer de indices
 	unsigned int mvp_id;
 	unsigned int color_id;
+	unsigned int tan_id;
 };
 
 class GL4Render : public GL1Render
@@ -24,6 +25,6 @@ public:
 	virtual void drawObjectInstanced(Object* obj, unsigned numInstances, glm::mat4* mvps, glm::vec4* colors) override;
 
 private:
-	std::unordered_map<unsigned int, VBO_t> bufferObjects;
+	std::unordered_map<unsigned int, VAO_t> bufferObjects;
 };
 
