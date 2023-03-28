@@ -5,7 +5,7 @@ class OrbitalLight : public Light
 {
 public:
 
-	OrbitalLight(glm::vec4 direction, glm::vec3 center, glm::vec3 color, Type type, float linearAtt, float radius);
+	OrbitalLight(glm::vec3 center, glm::vec3 color, float linearAtt, float radius);
 	virtual void step(double deltaTime) override;
 private:
 	float radius = 1;

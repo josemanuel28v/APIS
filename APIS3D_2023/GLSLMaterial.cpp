@@ -35,63 +35,69 @@ void GLSLMaterial::prepare()
 
 	if (getTexturing())
 	{
-		if (colorMap)
+		Texture::TextureType textType = colorMap->getType();
+
+		program->setInt("textType", (int)textType);
+
+		switch (textType)
 		{
-			Texture::TextureType textType = colorMap->getType();
+		case Texture::COLOR2D:
+			colorMap->bind(0);
+			glDisable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+			program->setTexture2D("colorText", 0);
+			program->setTexture2D("cubeText", 1);
+			program->setTexture2D("reflectText", 2);
+			program->setTexture2D("refractText", 3);
+			program->setTexture2D("normalText", 4);
+			break;
 
-			program->setInt("textType", (int)textType);
-
-			switch (textType)
-			{
-			case Texture::COLOR2D:
-				colorMap->bind(0);
-				glDisable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-				program->setTexture2D("colorText", 0);
-				program->setTexture2D("cubeText", 1);
-				break;
-
-			case Texture::COLOR3D:
-				colorMap->bind(1);
-				glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-				program->setTexture2D("colorText", 0);
-				program->setTexture2D("cubeText", 1);
-				break;
-
-				/*
-					Necesario setear colorText y cubeText en ambos casos
-				*/
-			}
-		}
-		else if (getReflection())
-		{
-			Texture::TextureType textType = reflectionMap->getType();
-			program->setInt("textType", (int)textType);
-
-			reflectionMap->bind(1);
+		case Texture::COLOR3D:
+			colorMap->bind(1);
 			glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 			program->setTexture2D("colorText", 0);
 			program->setTexture2D("cubeText", 1);
-		}
-		else if (getRefraction())
-		{
-			Texture::TextureType textType = refractionMap->getType();
-			program->setInt("textType", (int)textType);
+			program->setTexture2D("reflectText", 2);
+			program->setTexture2D("refractText", 3);
+			program->setTexture2D("normalText", 4);
+			break;
 
-			refractionMap->bind(1);
-			glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-			program->setTexture2D("colorText", 0);
-			program->setTexture2D("cubeText", 1);
+			/*
+				Necesario setear colorText y cubeText en ambos casos
+			*/
 		}
+	}
 
-		/*
-			De momento un objeto solo podrá tener color de su propia textura o de un cubemap reflejado o refractado, no a la vez
-		*/
+	if (getReflection())
+	{
+		reflectionMap->bind(2);
+		glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+		program->setTexture2D("colorText", 0);
+		program->setTexture2D("cubeText", 1);
+		program->setTexture2D("reflectText", 2);
+		program->setTexture2D("refractText", 3);
+		program->setTexture2D("normalText", 4);
+
+	}
+
+	if (getRefraction())
+	{
+		refractionMap->bind(3);
+		glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+		program->setTexture2D("colorText", 0);
+		program->setTexture2D("cubeText", 1);
+		program->setTexture2D("reflectText", 2);
+		program->setTexture2D("refractText", 3);
+		program->setTexture2D("normalText", 4);
 	}
 
 	if (normalMode == FROM_MAP)
 	{
-		normalMap->bind(2);
-		program->setTexture2D("normalText", 2);// normalMap->getTextureUnit());
+		normalMap->bind(4);
+		program->setTexture2D("colorText", 0);
+		program->setTexture2D("cubeText", 1);
+		program->setTexture2D("reflectText", 2);
+		program->setTexture2D("refractText", 3);
+		program->setTexture2D("normalText", 4);
 	}
 
 	// Uniforms
@@ -112,10 +118,10 @@ void GLSLMaterial::prepare()
 
 	for (int i = 0; i < System::lights->size(); i++)
 	{
-		program->setVec4("lights[" + std::to_string(i) + "].direction", (*System::lights)[i]->getInfo().direction);
 		program->setVec3("lights[" + std::to_string(i) + "].position", (*System::lights)[i]->getPosition());
 		program->setVec3("lights[" + std::to_string(i) + "].color", (*System::lights)[i]->getInfo().color);
 		program->setInt("lights[" + std::to_string(i) + "].type", (int)(*System::lights)[i]->getInfo().type);
+		program->setFloat("lights[" + std::to_string(i) + "].intensity", (int)(*System::lights)[i]->getInfo().intensity);
 		program->setFloat("lights[" + std::to_string(i) + "].linearAtt", (int)(*System::lights)[i]->getInfo().linearAtt);
 	}
 

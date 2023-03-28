@@ -1,8 +1,8 @@
 #include "Light.h"
 
-Light::Light(glm::vec4 direction, glm::vec3 position, glm::vec3 color, Type type, float linearAtt)
+Light::Light(glm::vec3 position, glm::vec3 color, Type type, float intensity, float linearAtt)
 {
-    info = { direction, color, type, linearAtt };
+    info = { color, type, intensity, linearAtt };
     this->position = glm::vec4(position, 1.0f);
 }
 

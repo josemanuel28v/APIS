@@ -1,10 +1,9 @@
 #include "OrbitalLight.h"
 
-OrbitalLight::OrbitalLight(glm::vec4 direction, glm::vec3 center, glm::vec3 color, Type type, float linearAtt, float radius)
+OrbitalLight::OrbitalLight(glm::vec3 center, glm::vec3 color, float linearAtt, float radius)
 {
-	this->info.direction = direction;
 	this->info.color = color;
-	this->info.type = type;
+	this->info.type = POINT;
 	this->info.linearAtt = linearAtt;
 	this->center = center;
 	this->radius = radius;

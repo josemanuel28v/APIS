@@ -4,21 +4,22 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 proj;
 
-uniform int computeReflect;//
-uniform int computeRefract;//
-uniform float refractCoef;//
+uniform int computeReflect;
+uniform int computeRefract;
+uniform float refractCoef;
 uniform vec3 eyePos;
 uniform int normalMode; 
 
 in vec4 vpos;
 in vec4 vnorm;
-in vec4 vtan; //
+in vec4 vtan; 
 in vec2 vtextcoord;
 
-out mat3 TBN; // 
+out mat3 TBN; 
 out vec4 fpos;
 out vec4 fnormal;
-out vec3 ftextCube; //
+out vec3 ftextCubeRfl;
+out vec3 ftextCubeRfr;
 out vec2 ftextcoord;
 
 void main()
@@ -37,19 +38,16 @@ void main()
 		TBN = transpose(mat3(tan, btan, normalize(fnormal)));
 	}
 
-	// Caso en el que no hay reflection ni refraction (skybox)
-	ftextCube = fpos.xyz;
-
 	if (computeReflect == 1)
 	{
 		vec3 I = normalize(fpos.xyz - eyePos);
-		ftextCube = reflect(I, normalize(fnormal.xyz));
+		ftextCubeRfl = reflect(I, normalize(fnormal.xyz));
 	}
 
 	if (computeRefract == 1)
 	{
 		vec3 I = normalize(fpos.xyz - eyePos);
-		ftextCube = refract(I, normalize(fnormal.xyz), refractCoef);
+		ftextCubeRfr = refract(I, normalize(fnormal.xyz), refractCoef);
 	}
 
 	gl_Position = mvp * vpos;

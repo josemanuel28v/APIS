@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Object3D.h"
+#include "Object.h"
 #include "Camera.h"
 
-class Billboard : public Object3D
+class Billboard : public Object
 {
 public:
 	Billboard(std::string mshFile);

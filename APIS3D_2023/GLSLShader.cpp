@@ -75,15 +75,17 @@ void GLSLShader::setupShaderVarList() {
 		varList[std::string(name)] = glGetAttribLocation(programId,name);
 		//std::cout << "Attribute: " << std::string(name) << std::endl;
 	}
-	std::cout << std::endl;
 
 	glGetProgramiv(programId, GL_ACTIVE_UNIFORMS, &count);
+	std::cout << "Uniforms: " << count << std::endl;
 	for (int i = 0; i < count; i++)
 	{
 		glGetActiveUniform(programId, (GLuint)i, bufSize, &length, &size,&type, name);
 		varList[std::string(name)] = glGetUniformLocation(programId,name);
 		std::cout << "Uniform: " << std::string(name) << std::endl;
 	}
+	std::cout << std::endl;
+
 }
 
 void GLSLShader::linkPrograms()

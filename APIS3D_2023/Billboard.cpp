@@ -1,10 +1,7 @@
 #include "Billboard.h"
 #include "System.h"
 
-Billboard::Billboard(std::string mshFile)
-{
-	loadDataFromFile(mshFile.c_str());
-}
+Billboard::Billboard(std::string mshFile) : Object(mshFile) {}
 
 void Billboard::computeModelMatrix()
 {

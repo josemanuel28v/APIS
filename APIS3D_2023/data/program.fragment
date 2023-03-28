@@ -3,34 +3,40 @@
 
 struct lightInfo 
 {
-	vec4 direction;
 	vec3 position;
 	vec3 color;
 	int  type;
+	float intensity;
 	float linearAtt;
 
 };
 
-uniform int textType; //
-uniform samplerCube cubeText; //
-uniform sampler2D normalText; 
+uniform int textType; 
+uniform int computeReflect;
+uniform int computeRefract;
+uniform int texturing;
+uniform int lighting;
+uniform int normalMode;
+uniform int shininess;
+
 uniform sampler2D colorText;
+uniform samplerCube cubeText; 
+uniform samplerCube reflectText;
+uniform samplerCube refractText;
+uniform sampler2D normalText; 
+
 uniform lightInfo lights[8];
 uniform int numLights;
 uniform vec3 ambient;
 
-uniform int texturing;
-uniform int lighting;
-uniform int normalMode;
-
-uniform int shininess;
 uniform vec3 eyePos;
 uniform vec4 baseColor;
 
 in vec2 ftextcoord;
 in vec4 fpos;
 in vec4 fnormal;
-in vec3 ftextCube; //
+in vec3 ftextCubeRfl;
+in vec3 ftextCubeRfr;
 in mat3 TBN; 
 
 out vec4 fragColor;
@@ -43,11 +49,9 @@ void main()
 	// No iluminado + text		 -> colorBase * colorText
 	// No iluminado + no text	 -> colorBase
 
-	// De momento un objeto puede:
-	//		Tener su propia textura 2D (objeto texturizado normal)
-	//		Tener su propia textura 3D (objeto skybox)
-	//		Tener un reflectCubeMap (objeto al que se le pega la reflexion del skybox)
-	//		Tener un refractCubeMap (objeto al que se le pega la refracciion del skybox)
+	// De momento un objeto puede tener:
+	//	Su propia textura (Color2D o Color3D) + textura de reflexion + textura de refraccion
+	
 
 	vec4 objectColor = baseColor;
 
@@ -59,9 +63,25 @@ void main()
 		}
 		else if (textType == 1) // Color3D (skybox o objetos reflectantes o refractantes)
 		{
-			objectColor = objectColor * textureCube(cubeText, ftextCube);
+			objectColor = objectColor * textureCube(cubeText, fpos.xyz);
 		}
-	}	
+	}
+
+	if (computeReflect == 1 && computeRefract == 1)
+	{
+		vec4 refractColor = textureCube(refractText, ftextCubeRfr);
+		vec4 reflectColor = textureCube(reflectText, ftextCubeRfl);
+
+		objectColor = objectColor * mix(refractColor, reflectColor, 0.5); // Pseudo-fresnel
+	}
+	else if (computeReflect == 1)
+	{
+		objectColor = objectColor * textureCube(reflectText, ftextCubeRfl);
+	}
+	else if (computeRefract == 1)
+	{
+		objectColor = objectColor * textureCube(refractText, ftextCubeRfr);
+	}
 
 	if (lighting == 1)
 	{
@@ -89,7 +109,7 @@ void main()
 
 			if(lights[i].type == 0)
 			{
-				L = normalize(lights[i].direction.xyz);
+				L = normalize(lights[i].position); // Cuando la luz es direccional position == direction
 			}
 			else if(lights[i].type == 1)
 			{
@@ -98,13 +118,12 @@ void main()
 				L = normalize(L);
 			}
 
-			vec3 R = normalize(reflect(L,N));
-			vec3 EYE = normalize(fpos.xyz-eyePos);
+			vec3 R = normalize(reflect(L, N));
+			vec3 EYE = normalize(fpos.xyz - eyePos);
 			float attenuation = 1.0f / (1.0f + lights[i].linearAtt * distance); 
 
-			// Factor de intensidad por defecto 0.5
-			diff += attenuation * max( dot(L,N),0.0f);
-			spec += attenuation * pow(max(dot(R,EYE),0.0f),shininess);
+			diff += attenuation * lights[i].intensity * max( dot(L, N), 0.0f);
+			spec += attenuation * lights[i].intensity * pow(max(dot(R, EYE), 0.0f), shininess);
 
 			lightColor *= lights[i].color;
 		}

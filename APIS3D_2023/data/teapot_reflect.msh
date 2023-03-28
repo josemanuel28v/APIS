@@ -5,7 +5,7 @@
 				<blend>alpha</blend>
 				<color>1,1,1,1</color>
 				<reflection>true</reflection>
-				<texture cubeMap="true" >sky_left.png,sky_right.png,sky_front.png,sky_back.png,sky_top.png,sky_bottom.png</texture>
+				<reflectionTexture>sky_left.png,sky_right.png,sky_front.png,sky_back.png,sky_top.png,sky_bottom.png</reflectionTexture>
 				<shininess>64</shininess>
 				<depthWrite>true</depthWrite>
 				<vShader>program.vertex</vShader>

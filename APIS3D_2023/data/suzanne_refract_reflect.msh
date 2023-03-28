@@ -5,8 +5,10 @@
 				<blend>alpha</blend>
 				<color>1,1,1,1</color>
 				<refraction>true</refraction>
+				<reflection>true</reflection>
 				<light>false</light>
 				<refractionTexture>sky_left.png,sky_right.png,sky_front.png,sky_back.png,sky_top.png,sky_bottom.png</refractionTexture>
+				<reflectionTexture>sky_left.png,sky_right.png,sky_front.png,sky_back.png,sky_top.png,sky_bottom.png</reflectionTexture>
 				<refractCoef>0.9</refractCoef>
 				<shininess>0</shininess>
 				<depthWrite>true</depthWrite>

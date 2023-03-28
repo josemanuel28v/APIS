@@ -1,0 +1,13 @@
+Las rutas a recursos detro de un .msh solo incluye el nombre del fichero
+y se asume que se encuentran en la misma carpeta que el propio .msh
+
+Las texturas de refracción y reflexión se definian como <texture cubeMap = true>
+pero de esta forma un objeto solo puede ser reflejado/refractado con una textura3D
+o texturizado con textura2D
+
+Para permitir textura + reflectMap + refractMap
+	<texture> Indicará la textura base (colorMap) que puede ser 2D en caso
+	de objetos normales y 3D en caso de ser un skybox
+
+	<reflectionTexture> Textura 3D para la reflexión (siempre3D)
+	<refractionTexture> Textura 3D para la refracción (siempre3D)

@@ -26,16 +26,14 @@ void mainP5()
     System::initSystem();
 
     // Luz
-    System::addLight(new Light(glm::vec4(0.0f), glm::vec3(-3, 3, 0), glm::vec3(1.0f), Light::POINT, 0.1f));
+    System::addLight(new Light(glm::vec3(-3, 3, 0), glm::vec3(1.0f), Light::POINT, 1.0f, 0.1f));
 
     // Totem
-    Object3D* totem1 = new Object3D();
-    totem1->loadDataFromFile("data/column.msh");
+    Object3D* totem1 = new Object3D("data/column.msh");
     totem1->setScaling(glm::vec4(0.01f));
     totem1->setPosition(glm::vec4(-2.0, 0.0f, 0.0f, 1.0f));
 
-    Object3D* totem2 = new Object3D();
-    totem2->loadDataFromFile("data/column.msh");
+    Object3D* totem2 = new Object3D("data/column.msh");
     totem2->setScaling(glm::vec4(0.01f));
     totem2->setPosition(glm::vec4(2.0, 0.0f, 0.0f, 1.0f));
 
@@ -98,41 +96,40 @@ void mainP6()
     FactoryEngine::SetSelectedInputBackend(FactoryEngine::InputBackend::GLFW);
 
     // Inicializar cámara
-    glm::vec3 position = glm::vec3(0.0f, 0.0f, 1.0f);
+    glm::vec3 position = glm::vec3(0.0f, 0.0f, 4.0f);
     glm::vec3 lookAt = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-    //Camera* camera = new CameraKeyboard(Camera::ProjectionType::PERSPECTIVE, position, up, lookAt);
-    Camera* camera = new OrbitalCamera(Camera::PERSPECTIVE, position.y, up, lookAt, 2);
+    Camera* camera = new CameraKeyboard(Camera::ProjectionType::PERSPECTIVE, position, up, lookAt);
+    //Camera* camera = new OrbitalCamera(Camera::PERSPECTIVE, position.y, up, lookAt, 2);
 
     // Inicializar sistema (backends)
     System::initSystem();
 
     // Luz
-    System::addLight(new Light(glm::vec4(0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f), Light::POINT, 0.1f));
+    System::addLight(new Light(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(1.0f), Light::POINT, 2.0f, 0.01f));
 
-    Object3D* skybox = new Object3D();
-    Object3D* suzanne = new Object3D();
-    Object3D* teapot = new Object3D();
-    Object3D* cube = new Object3D();
+    Object3D* skybox = new Object3D("data/skybox.msh");
+    Object3D* suzanne = new Object3D("data/suzanne_refract.msh");
+    Object3D* suzanneRefractReflect = new Object3D("data/suzanne_refract_reflect.msh");
+    Object3D* cube = new Object3D("data/normalMapCube.msh");
+    Object3D* cubeReflect = new Object3D("data/normalMapCubeReflection.msh");
+    Object3D* teapot = new Object3D("data/teapot_reflect.msh");
 
-    skybox->loadDataFromFile("data/skybox.msh");
-    suzanne->loadDataFromFile("data/suzanne_refract.msh");
-    teapot->loadDataFromFile("data/teapot_reflect.msh");
-    cube->loadDataFromFile("data/normalMapCube.msh");
+    skybox->setScaling(glm::vec4(30.0f));
 
-    skybox->setScaling(glm::vec4(10.0f));
-    cube->setScaling(glm::vec4(0.33f));
-    suzanne->setScaling(glm::vec4(0.33f));
-    teapot->setScaling(glm::vec4(0.33f));
-
-    cube->setPosition(glm::vec4(-1.0f, 0.0f, 0.0f, 1.0f));
-    teapot->setPosition(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    suzanne->setPosition(glm::vec4(-6.0f, 0.0f, 0.0f, 1.0f));
+    suzanneRefractReflect->setPosition(glm::vec4(-3.0f, 0.0f, 0.0f, 1.0f));
+    cube->setPosition(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+    cubeReflect->setPosition(glm::vec4(3.0f, 0.0f, 0.0f, 1.0f));
+    teapot->setPosition(glm::vec4(6.0f, 0.0f, 0.0f, 1.0f));
 
     // Añadir objetos al sistema y lanzar el bucle de dibujado
     System::addObject(skybox);
     System::addObject(suzanne);
     System::addObject(teapot);
     System::addObject(cube);
+    System::addObject(cubeReflect);
+    System::addObject(suzanneRefractReflect);
     System::setAmbient(glm::vec3(0.2, 0.2, 0.2));
     System::setCamera(camera);
     System::mainLoop();

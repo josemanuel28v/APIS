@@ -11,14 +11,14 @@ public:
 	};
 
 	struct LightInfo {
-		glm::vec4 direction;
 		glm::vec3 color;
-		Type  type;
+		Type type;
+		float intensity;
 		float linearAtt;
 	};
 
 	Light() {}
-	Light(glm::vec4 direction, glm::vec3 position, glm::vec3 color, Type type, float linearAtt);
+	Light(glm::vec3 position, glm::vec3 color, Type type, float intensity, float linearAtt);
 	Type getType() const;
 	void setType(Type type);
 	const glm::vec3& getColor() const;
