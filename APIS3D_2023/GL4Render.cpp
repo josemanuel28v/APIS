@@ -32,17 +32,12 @@ void GL4Render::setupObject(Object* obj)
 			glEnableVertexAttribArray(program->varList["vpos"]);
 			glVertexAttribPointer(program->varList["vpos"], 4, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, position));
 
-			if (mat->getNormalMode() == Material::PER_VERTEX)
+			// Aunque las normales vengan de un mapa de normales se necesitan las normales por vértice para calcular la TBN
+			glEnableVertexAttribArray(program->varList["vnorm"]);
+			glVertexAttribPointer(program->varList["vnorm"], 4, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, normal));
+			
+			if (mat->getNormalMapping())
 			{
-				glEnableVertexAttribArray(program->varList["vnorm"]);
-				glVertexAttribPointer(program->varList["vnorm"], 4, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, normal));
-			}
-			else if (mat->getNormalMode() == Material::FROM_MAP)
-			{
-				// Aunque las normales vengan de un mapa de normales se necesitan las normales por vértice para calcular la TBN
-				glEnableVertexAttribArray(program->varList["vnorm"]);
-				glVertexAttribPointer(program->varList["vnorm"], 4, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, normal));
-
 				glEnableVertexAttribArray(program->varList["vtan"]);
 				glVertexAttribPointer(program->varList["vtan"], 4, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, tangent));
 			}

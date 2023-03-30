@@ -108,6 +108,17 @@ void Object::load(std::string fileName)
                 }
             }
 
+            // Normal map 
+            if (bufferNode.child("material").child("normalTexture"))
+            {
+                std::string textureFile = path + bufferNode.child("material").child("normalTexture").text().as_string();
+
+                Texture* texture = FactoryEngine::getNewTexture();
+                texture->load(textureFile);
+                mat->setNormalMap(texture);
+                mat->setNormalMapping(true);
+            }
+
             // Shaders
             if (bufferNode.child("material").child("vShader") && bufferNode.child("material").child("fShader"))
             {
@@ -170,19 +181,7 @@ void Object::load(std::string fileName)
             // Normales
             if (bufferNode.child("normals"))
             {
-                mat->setNormalMode(Material::PER_VERTEX);
                 nList = utils::splitString<float>(bufferNode.child("normals").text().as_string(), ',');
-            }
-
-            // Normal map (en caso de existir normalMap, sobreescribe el modo PER_VERTEX)
-            if (bufferNode.child("material").child("normalTexture"))
-            {
-                std::string textureFile = path + bufferNode.child("material").child("normalTexture").text().as_string();
-
-                Texture* texture = FactoryEngine::getNewTexture();
-                texture->load(textureFile);
-                mat->setNormalMap(texture);
-                mat->setNormalMode(Material::FROM_MAP);
             }
 
             // Tangentes

@@ -16,7 +16,7 @@ uniform int computeReflect;
 uniform int computeRefract;
 uniform int texturing;
 uniform int lighting;
-uniform int normalMode;
+uniform int normalMapping;
 uniform int shininess;
 
 uniform sampler2D colorText;
@@ -87,11 +87,11 @@ void main()
 	{
 		vec3 N;
 
-		if(normalMode == 1)		// PER_VERTEX
+		if(normalMapping == 0)		// Normal from vertex
 		{
 			N = normalize(fnormal.xyz);
 		}
-		else if (normalMode == 2)	// FROM_MAP
+		else if (normalMapping == 1)	// Normal texture
 		{
 			vec3 normalTextValue = texture2D(normalText, ftextcoord).xyz;
 			normalTextValue = normalTextValue * 2.0f - 1.0f;

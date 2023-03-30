@@ -9,13 +9,6 @@ class Material
 {
 public:
 
-	enum NormalMode
-	{
-		NONE = 0,
-		PER_VERTEX = 1,
-		FROM_MAP = 2
-	};
-
 	enum BlendMode
 	{
 		SOLID, ALPHA, ADD, MUL
@@ -31,8 +24,8 @@ public:
 	virtual void setLighting(bool lighting);
 	virtual void setCulling(bool culling);
 	virtual void setDepthWrite(bool depthWrite);
+	virtual void setNormalMapping(bool normalMapping);
 	virtual void setBlendMode(BlendMode blendMode);
-	virtual void setNormalMode(NormalMode normalMode);
 	virtual void setTexture(Texture* colorMap);
 	virtual void setRefractionMap(Texture* refractionMap);
 	virtual void setReflectionMap(Texture* reflectionMap);
@@ -48,8 +41,8 @@ public:
 	virtual bool getLighting() const;
 	virtual bool getCulling() const;
 	virtual bool getDepthWrite() const;
+	virtual bool getNormalMapping() const;
 	virtual BlendMode getBlendMode() const;
-	virtual NormalMode getNormalMode() const;
 	virtual Texture* getTexture() const;
 	virtual Texture* getRefractionMap() const;
 	virtual Texture* getReflectionMap() const;
@@ -79,7 +72,7 @@ protected:
 	bool lighting = false;
 	bool culling = false;
 	bool depthWrite = false;
-	NormalMode normalMode = NormalMode::NONE;
+	bool normalMapping = false;
 	BlendMode blendMode = BlendMode::SOLID;
 };
 

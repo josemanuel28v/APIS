@@ -173,7 +173,6 @@ CubeTex::CubeTex()
 	frontMat->setShininess(50);
 	frontMat->setTexturing(true);
 	frontMat->setLighting(true);
-	frontMat->setNormalMode(Material::PER_VERTEX);
 	frontMat->setDepthWrite(true);
 	frontMat->setCulling(true);
 
@@ -182,7 +181,6 @@ CubeTex::CubeTex()
 	topMat->setShininess(50);
 	topMat->setTexturing(true);
 	topMat->setLighting(true);
-	topMat->setNormalMode(Material::PER_VERTEX);
 	topMat->setDepthWrite(true);
 	topMat->setCulling(true);
 

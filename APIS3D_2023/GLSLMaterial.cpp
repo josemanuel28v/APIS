@@ -33,7 +33,7 @@ void GLSLMaterial::prepare()
 {
 	program->use();
 
-	if (getTexturing())
+	if (texturing)
 	{
 		Texture::TextureType textType = colorMap->getType();
 
@@ -67,7 +67,7 @@ void GLSLMaterial::prepare()
 		}
 	}
 
-	if (getReflection())
+	if (reflection)
 	{
 		reflectionMap->bind(2);
 		glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
@@ -79,7 +79,7 @@ void GLSLMaterial::prepare()
 
 	}
 
-	if (getRefraction())
+	if (refraction)
 	{
 		refractionMap->bind(3);
 		glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
@@ -90,7 +90,7 @@ void GLSLMaterial::prepare()
 		program->setTexture2D("normalText", 4);
 	}
 
-	if (normalMode == FROM_MAP)
+	if (normalMapping)
 	{
 		normalMap->bind(4);
 		program->setTexture2D("colorText", 0);
@@ -108,7 +108,7 @@ void GLSLMaterial::prepare()
 	program->setVec3("ambient", System::getAmbient());
 	program->setInt("texturing", (int)texturing);
 	program->setInt("lighting", (int)lighting);
-	program->setInt("normalMode", (int)normalMode);
+	program->setInt("normalMapping", (int)normalMapping);
 	program->setInt("shininess", shininess);
 	program->setVec4("baseColor", color);
 	program->setInt("numLights", System::lights->size());

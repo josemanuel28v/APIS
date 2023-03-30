@@ -36,9 +36,9 @@ void Material::setBlendMode(BlendMode blendMode)
     this->blendMode = blendMode;
 }
 
-void Material::setNormalMode(NormalMode normalMode)
+void Material::setNormalMapping(bool normalMapping)
 {
-    this->normalMode = normalMode;
+    this->normalMapping = normalMapping;
 }
 
 void Material::setTexture(Texture* colorMap)
@@ -61,10 +61,6 @@ void Material::setNormalMap(Texture* normalMap)
     this->normalMap = normalMap;
 }
 
-/* 
-    Si se comparten programas entre materiales entonces el destructor no sabrá si ese program se ha destruido o no por lo que habrá errores de ejecución
-    esto se podría tratar con punteros inteligentes (shared_ptr)
-*/
 void Material::setProgram(RenderProgram* program)
 {
     this->program = program;
@@ -120,9 +116,9 @@ Material::BlendMode Material::getBlendMode() const
     return blendMode;
 }
 
-Material::NormalMode Material::getNormalMode() const
+bool Material::getNormalMapping() const
 {
-    return normalMode;
+    return normalMapping;
 }
 
 Texture* Material::getTexture() const
